@@ -26,7 +26,7 @@ public class RoomType {
         this.maxOccupancy = maxOccupancy;
     }
     public static String generateId() {
-        int number = 100 + random.nextInt(900);
+        int number = 106 + random.nextInt(900);
         return "rt" + number;
     }
 
