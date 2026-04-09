@@ -7,6 +7,7 @@ import hotel.services.*;
 import hotel.ui.AdminMenu;
 import hotel.ui.GuestMenu;
 import hotel.ui.ReceptionistMenu;
+import hotel.utils.DisplayUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,9 +20,9 @@ public class MainMenu {
 
     private Scanner scanner = new Scanner(System.in);
 
-    private final AuthService authService;
-    private final GuestService guestService;
-    private final AdminService adminService;
+    private final AuthService         authService;
+    private final GuestService        guestService;
+    private final AdminService        adminService;
     private final ReceptionistService receptionistService;
 
     public MainMenu(Scanner scanner, AuthService authService, GuestService guestService, AdminService adminService, ReceptionistService receptionistService) {
@@ -33,7 +34,7 @@ public class MainMenu {
     }
 
     public void run() {
-        System.out.println("Hotel Reservation System");
+        DisplayUtils.printHeader("Hotel Reservation System");
         System.out.println("\nMain Menu");
 
         boolean running = true;
@@ -62,7 +63,7 @@ public class MainMenu {
     }
 
     private void handleLogin() {
-        System.out.println("\n\n\n\n\n\n\n\n\nLogin");
+        DisplayUtils.printHeader("Login");
 
         System.out.println("\nUsername: ");
         String username = scanner.nextLine();
@@ -72,11 +73,11 @@ public class MainMenu {
         Authenticatable user = authService.login(username, password);
 
         if (user == null) {
-            System.out.println("Invalid credentials. Please try again.");
+            DisplayUtils.printError("Invalid credentials. Please try again.");
             return;
         }
 
-        System.out.println("Login Successfully, Welcome Back " + user.getUsername() + "!");
+        DisplayUtils.printSuccess("Login Successfully, Welcome Back " + user.getUsername() + "!");
 
         if (user instanceof Guest) {
             GuestMenu guestmenu = new GuestMenu(scanner, guestService, (Guest) user);
@@ -91,12 +92,12 @@ public class MainMenu {
             receptionistmenu.show();
         }
         else {
-            System.out.println("Unknown Account Type!");
+            DisplayUtils.printError("Unknown Account Type!");
         }
     }
 
     private void handleRegister() {
-        System.out.println("\n\n\n\n\n\n\n\n\nGuest Register");
+        DisplayUtils.printHeader("Guest Register");
 
         System.out.println("\nEnter Username: ");
         String username = scanner.nextLine();
@@ -109,7 +110,7 @@ public class MainMenu {
             DOB = LocalDate.parse(scanner.nextLine(), theDate);
         }
         catch (DateTimeParseException e) {
-            System.out.println("Invalid date format.");
+            DisplayUtils.printError("Invalid date format.");
             return;
         }
 
@@ -125,16 +126,17 @@ public class MainMenu {
             gender = Gender.FEMALE;
         }
         else {
-            System.out.println("Invalid Input, Enter (M or F");
+            DisplayUtils.printError("Invalid Input, Enter (M or F");
             return;
         }
 
         try {
             Guest guest = authService.registerGuest(username, password, DOB, address, gender);
-            System.out.println("Registered successfully! Your guest ID: " + guest.getGuestId());
+            DisplayUtils.printSuccess("Registered successfully! Your guest ID: " + guest.getGuestId());
+            DisplayUtils.printInfo("You can now log in with your info.");
         }
         catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+            DisplayUtils.printError(e.getMessage());
         }
     }
 }
