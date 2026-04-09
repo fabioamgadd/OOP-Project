@@ -1,11 +1,11 @@
-package services;
+package hotel.services;
 import hotel.database.HotelDatabase;
 import hotel.enums.PaymentMethod;
 import hotel.models.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
+
 public class GuestService {
     private final RoomService roomService;
     private final ReservationService reservationService;
