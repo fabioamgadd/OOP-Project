@@ -28,8 +28,8 @@ public class Amenity {
 
 
     public static String generateId() {
-        int number = 10000 + random.nextInt(90000);
-        return "A" + number;
+        int number = 100 + random.nextInt(900);
+        return "a" + number;
     }
 
 
