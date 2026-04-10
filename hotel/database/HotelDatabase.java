@@ -66,25 +66,25 @@ public class HotelDatabase {
         Amenity safe   = findAmenityById("a107");
         Amenity gym    = findAmenityById("a108");
 
-        // Floor 1 — Single rooms
+        //Floor 1 for single rooms
         Room r101 = new Room("101", 1, single);  r101.addAmenity(wifi); r101.addAmenity(tv); r101.addAmenity(ac);
         Room r102 = new Room("102", 1, single);  r102.addAmenity(wifi); r102.addAmenity(ac);
         Room r103 = new Room("103", 1, single);  r103.addAmenity(wifi); r103.addAmenity(tv);
 
-        // Floor 2 — Double rooms
+        // Floor 2 for double rooms
         Room r201 = new Room("201", 2, doubleT); r201.addAmenity(wifi); r201.addAmenity(tv); r201.addAmenity(ac); r201.addAmenity(safe);
         Room r202 = new Room("202", 2, doubleT); r202.addAmenity(wifi); r202.addAmenity(tv); r202.addAmenity(brkfst);
         Room r203 = new Room("203", 2, doubleT); r203.addAmenity(wifi); r203.addAmenity(ac);
 
-        // Floor 3 — Deluxe rooms
+        // Floor 3 for deluxe rooms
         Room r301 = new Room("301", 3, deluxe);  r301.addAmenity(wifi); r301.addAmenity(tv); r301.addAmenity(minibar); r301.addAmenity(safe);
         Room r302 = new Room("302", 3, deluxe);  r302.addAmenity(wifi); r302.addAmenity(brkfst); r302.addAmenity(gym);
 
-        // Floor 4 — Family rooms
+        // Floor 4 for family rooms
         Room r401 = new Room("401", 4, family);  r401.addAmenity(wifi); r401.addAmenity(tv); r401.addAmenity(ac); r401.addAmenity(brkfst);
         Room r402 = new Room("402", 4, family);  r402.addAmenity(wifi); r402.addAmenity(ac);
 
-        // Floor 5 — Suites
+        // Floor 5 for suites
         Room r501 = new Room("501", 5, suite);   r501.addAmenity(wifi); r501.addAmenity(tv); r501.addAmenity(minibar); r501.addAmenity(jacuzzi); r501.addAmenity(brkfst); r501.addAmenity(gym);
         Room r502 = new Room("502", 5, suite);   r502.addAmenity(wifi); r502.addAmenity(tv); r502.addAmenity(jacuzzi); r502.addAmenity(safe);
 
@@ -96,24 +96,24 @@ public class HotelDatabase {
     }
 
     private static void seedStaff() {
-        // Admin — password: Admin@123
+        // Admin 
         staffMembers.add(new Admin(
                 "staff-admin-001", "admin", "Admin@123",
                 LocalDate.of(1985, 3, 10), 40, Gender.MALE));
 
-        // Receptionist 1 — password: Recep@123
+        // Receptionist 1
         staffMembers.add(new Receptionist(
                 "staff-recep-001", "sara_r","Recep@123",
                 LocalDate.of(1995, 7, 22), 40, Gender.FEMALE));
 
-        // Receptionist 2 — password: Recep@456
+        // Receptionist 2 
         staffMembers.add(new Receptionist(
                 "staff-recep-002", "ahmed_r", "Recep@456",
                 LocalDate.of(1993, 11, 5), 40, Gender.MALE));
     }
 
     private static void seedGuests() {
-        // Guest 1 — password: Guest@123
+        // Guest 1 
         Guest g1 = new Guest(
                 "guest-001", "john_doe","Guest@123",
                 LocalDate.of(1990, 4, 15), 3000.0,
@@ -121,7 +121,7 @@ public class HotelDatabase {
                 new RoomPreference("Double", 2, false, false));
         guests.add(g1);
 
-        // Guest 2 — password: Guest@456
+        // Guest 2 
         Guest g2 = new Guest(
                 "guest-002", "layla_m", "Guest@456",
                 LocalDate.of(1997, 9, 30), 7500.0,
@@ -129,7 +129,7 @@ public class HotelDatabase {
                 new RoomPreference("Suite", 5, false, false));
         guests.add(g2);
 
-        // Guest 3 — password: Guest@789
+        // Guest 3 
         Guest g3 = new Guest(
                 "guest-003", "omar_k","Guest@789",
                 LocalDate.of(1985, 1, 20), 1200.0,
@@ -139,7 +139,6 @@ public class HotelDatabase {
     }
 
     private static void seedReservationsAndInvoices() {
-        // Pre-populate one confirmed reservation for guest-001 on room 201
         Room room201 = findRoomById("201");
         if (room201 == null) return;
 
