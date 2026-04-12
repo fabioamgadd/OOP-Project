@@ -211,14 +211,6 @@ public class RoomService implements Manageable<Room> {
 
 
 
-
-
-
-
-
-
-
-
     public List<Amenity> getAllAmenities() {
         return new ArrayList<>(HotelDatabase.amenities);
     }
