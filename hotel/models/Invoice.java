@@ -108,7 +108,7 @@ public class Invoice implements Payable {
             paymentMethodStr = "N/A";
         }
         return String.format(
-                "=== Invoice ===\n" +
+                " *Invoice* \n" +
                 "Invoice ID    : %s\n" +
                 "Reservation ID: %s\n" +
                 "Guest ID      : %s\n" +
