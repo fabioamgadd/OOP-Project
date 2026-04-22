@@ -1,4 +1,4 @@
-package Hotel_Project.ui;
+package hotel.ui;
 
 import hotel.models.Reservation;
 import hotel.models.Staff;
