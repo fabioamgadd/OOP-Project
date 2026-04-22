@@ -134,7 +134,7 @@ public class RoomService implements Manageable<Room> {
         HotelDatabase.roomTypes.add(rt);
 
     }
-    public boolean updatedRoomType(RoomType updated){
+    public boolean updateRoomType(RoomType updated){
         for (int i = 0; i < HotelDatabase.roomTypes.size(); i++) {
             if (HotelDatabase.roomTypes.get(i).getTypeId().equals(updated.getTypeId())) {
                 HotelDatabase.roomTypes.set(i, updated);
