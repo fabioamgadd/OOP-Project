@@ -1,4 +1,4 @@
-package Hotel_Project.ui;
+package hotel.ui;
 
 import hotel.models.*;
 import hotel.services.AdminService;
