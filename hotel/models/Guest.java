@@ -28,7 +28,7 @@ public class Guest implements Authenticatable {
     }
 
     @Override
-    public boolean authenticate(String plainPassword,String comparable) {
+    public boolean authenticate(String username ,String password) {
         if ( this.username.equals(username) && PasswordUtils.matches(password, this.password))
             return true;
 
