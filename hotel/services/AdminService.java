@@ -73,7 +73,7 @@ public class AdminService {
     {
         return roomService.findAmenityById(amenityId);
     }
-    public List <Aminety>getAllAmenities()
+    public List <Amenity>getAllAmenities()
     {
         return roomService.getAllAmenities();
     }
@@ -134,7 +134,7 @@ public class AdminService {
     }
     public List<Reservation>getAllReservations()
     {
-        return HotelDatabase.reservation;
+        return HotelDatabase.reservations;
     }
 
 
