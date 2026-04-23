@@ -1,5 +1,4 @@
 package hotel.models;
-import java.util.Random;
 
 public class RoomType {
     private String typeId;
@@ -7,8 +6,8 @@ public class RoomType {
     private String description;
     private double basePricePerNight;
     private int maxOccupancy;
+    private static int counterId=5;
 
-    private static final Random random = new Random();
 
     public RoomType(String typeId, String typeName, String description, double basePricePerNight, int maxOccupancy) {
         this.typeId = typeId;
@@ -19,16 +18,13 @@ public class RoomType {
     }
 
     public RoomType(String typeName, String description, double basePricePerNight, int maxOccupancy) {
-        this.typeId = generateId();
+        this.typeId =  "rt" + String.format("%03d",counterId++);
         this.typeName = typeName;
         this.description = description;
         this.basePricePerNight = basePricePerNight;
         this.maxOccupancy = maxOccupancy;
     }
-    public static String generateId() {
-        int number = 106 + random.nextInt(900);
-        return "rt" + number;
-    }
+    
 
     public String getTypeId() {
         return typeId;
