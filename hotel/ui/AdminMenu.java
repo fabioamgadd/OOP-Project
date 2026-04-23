@@ -225,21 +225,47 @@ public class AdminMenu {
             room.setRoomType(roomType);
         }
 
-        System.out.println("Available Amenities:");
-        List<Amenity> amenities = adminService.getAllAmenities();
-        for (int i = 0; i < amenities.size(); i++) {
-            Amenity amenity = amenities.get(i);
-            System.out.println(amenity.getAmenityId() + " — " + amenity.getName());
-        }
-        System.out.print("Amenity IDs (comma-separated, blank to keep current list): ");
-        String amenityIds = scanner.nextLine();
-        if (!amenityIds.isEmpty()) {
-            try {
-                room.setAmenities(resolveAmenities(amenityIds));
+        System.out.println("\nCurrent Amenities:");
+        List<Amenity> currentAmenities = room.getAmenities();
+        if (currentAmenities.isEmpty()) {
+            System.out.println("  No amenities.");
+        } else {
+            for (int i = 0; i < currentAmenities.size(); i++) {
+                Amenity a = currentAmenities.get(i);
+                System.out.println("  " + a.getAmenityId() + " — " + a.getName());
             }
-            catch (IllegalArgumentException e) {
-                DisplayUtils.printError(e.getMessage());
-                return;
+            System.out.print("\nEnter Amenity ID to remove (or blank to skip): ");
+            String removeId = scanner.nextLine().trim();
+            if (!removeId.isEmpty()) {
+                if (room.removeAmenity(removeId)) {
+                    DisplayUtils.printSuccess("Amenity removed from room.");
+                } else {
+                    DisplayUtils.printError("Amenity not found on this room.");
+                }
+            }
+        }
+
+        System.out.println("\nAvailable Amenities:");
+        List<Amenity> amenities = adminService.getAllAmenities();
+        if (amenities.isEmpty()) {
+            System.out.println("  No amenities defined.");
+        } else {
+            for (int i = 0; i < amenities.size(); i++) {
+                Amenity amenity = amenities.get(i);
+                System.out.println("  " + amenity.getAmenityId() + " — " + amenity.getName());
+            }
+            System.out.print("\nAmenity IDs to add (comma-separated, blank to skip): ");
+            String amenityIds = scanner.nextLine();
+            if (!amenityIds.isEmpty()) {
+                try {
+                    List<Amenity> newAmenities = resolveAmenities(amenityIds);
+                    for (Amenity a : newAmenities) {
+                        room.addAmenity(a);
+                    }
+                } catch (IllegalArgumentException e) {
+                    DisplayUtils.printError(e.getMessage());
+                    return;
+                }
             }
         }
 
