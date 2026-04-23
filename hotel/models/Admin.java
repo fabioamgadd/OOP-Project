@@ -15,6 +15,6 @@ public class Admin extends Staff, Role.ADMIN {
     }
 @Override
     public String toString() {
-        return String.format("Admin{%s}", super.toString());
+        return ("Admin"+ super.toString());
     }
 }
