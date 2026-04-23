@@ -1,6 +1,8 @@
 package hotel;
 
 import hotel.database.HotelDatabase;
+import hotel.models.Guest;
+import hotel.models.Staff;
 import hotel.services.*;
 import hotel.ui.MainMenu;
 
@@ -18,6 +20,17 @@ public class Main {
                 HotelDatabase.roomTypes.size(),
                 HotelDatabase.amenities.size());
 
+        System.out.println("\nStored accounts:");
+        System.out.println("\nStaff:");
+        for (Staff staff : HotelDatabase.staffMembers) {
+            System.out.println("Username: " + staff.getUsername() + " - Password: " + staff.getPassword());
+        }
+        System.out.println("\nGuests:");
+        for (Guest guest : HotelDatabase.guests) {
+            System.out.println("Username: " + guest.getUsername() + " - Password: " + guest.getPassword());
+        }
+        System.out.println();
+
         InvoiceService invoiceService = new InvoiceService();
         RoomService roomService = new RoomService();
         ReservationService reservationService = new ReservationService(roomService, invoiceService);
@@ -34,4 +47,3 @@ public class Main {
         scanner.close();
     }
 }
-
