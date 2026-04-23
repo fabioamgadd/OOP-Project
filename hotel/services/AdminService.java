@@ -86,52 +86,13 @@ public class AdminService {
     {
         return guestService.findGuestById(guestId);
     }
-    public boolean removeGuest(String guestId)
-    {
-        for(int i=0;i<HotelDatabase.guests.size();i++)
-        {
-            if(HotelDatabase.guests.get(i).getGuestId().equals(guestId))
-            {
-                HotelDatabase.guests.remove(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
+    
 
     public List <Staff>getAllStaff()
     {
         return HotelDatabase.staffMembers;
     }
 
-    public Staff getStaff(String staffId)
-    {
-        for(int i=0;i<HotelDatabase.staffMembers.size();i++)
-        {
-            Staff s =HotelDatabase.staffMembers.get(i);
-            if(s.getStaffId().equals(staffId))
-            {
-
-                return s;
-            }
-        }
-        return null;
-    }
-    public boolean removeStaff(String staffId)
-    {
-        boolean removed=false;
-        for(int i=0;i<HotelDatabase.staffMembers.size();i++)
-        {
-            if(HotelDatabase.staffMembers.get(i).getStaffId().equals(staffId))
-            {
-                HotelDatabase.staffMembers.remove(i);
-                i--;
-                removed = true;
-            }
-        }
-        return removed;
-    }
     public List<Reservation>getAllReservations()
     {
         return HotelDatabase.reservations;
