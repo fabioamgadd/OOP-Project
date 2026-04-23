@@ -1,7 +1,6 @@
 package hotel.services;
 
 import hotel.database.HotelDatabase;
-import hotel.models.Invoice;
 import hotel.models.Reservation;
 import hotel.models.Room;
 
@@ -25,14 +24,14 @@ public class ReservationService {
         if (room == null) {
             throw new IllegalArgumentException("Room '" + roomId + "' does not exist.");
         }
-        if (hasConflictingReservation(roomId, checkInDate, checkOutDate, null)) {
-            throw new IllegalStateException(
-                    "Room '" + roomId + "' is already reserved for part of the requested date range.");
+        if (!room.isAvailable()) {
+            throw new IllegalStateException("Room '" + roomId + "' is currently not available.");
         }
 
         Reservation res = new Reservation(guestId, room, checkInDate, checkOutDate);
         HotelDatabase.reservations.add(res);
 
+        roomService.markUnavailable(roomId);
         invoiceService.createInvoice(res.getReservationId(), guestId, res.getTotalCost());
 
         return res;
@@ -87,6 +86,7 @@ public class ReservationService {
             throw new IllegalStateException("Reservation cannot be cancelled in its current status: " + res.getStatus());
         }
 
+        roomService.markAvailable(res.getRoomId());
         invoiceService.voidInvoiceForReservation(reservationId);
 
         return true;
@@ -96,21 +96,9 @@ public class ReservationService {
         Reservation res = findById(reservationId);
         if (res == null) throw new IllegalArgumentException("Reservation not found.");
         if (LocalDate.now().isBefore(res.getCheckInDate())) {
-            throw new IllegalStateException("Cannot check in before the reservation start date.");
+            throw new IllegalStateException("Cannot check in before the reservation start date (" + res.getCheckInDate() + ").");
         }
-
-        Room room = roomService.findById(res.getRoomId());
-        if (room == null) {
-            throw new IllegalStateException("Room not found for reservation.");
-        }
-        if (!room.isAvailable()) {
-            throw new IllegalStateException("Room is currently occupied.");
-        }
-
         boolean ok = res.checkIn();
-        if (ok) {
-            roomService.markUnavailable(res.getRoomId());
-        }
         return ok;
     }
 
@@ -125,32 +113,4 @@ public class ReservationService {
         return ok;
     }
 
-    private boolean hasConflictingReservation(String roomId,
-                                              LocalDate requestedCheckIn,
-                                              LocalDate requestedCheckOut,
-                                              String ignoredReservationId) {
-        for (Reservation r : HotelDatabase.reservations) {
-            if (!r.getRoomId().equals(roomId)) {
-                continue;
-            }
-            if (ignoredReservationId != null && r.getReservationId().equals(ignoredReservationId)) {
-                continue;
-            }
-            if (r.getStatus() == hotel.enums.ReservationStatus.CANCELLED) {
-                continue;
-            }
-            if (r.getStatus() == hotel.enums.ReservationStatus.CHECKED_OUT) {
-                continue;
-            }
-            if (datesOverlap(requestedCheckIn, requestedCheckOut, r.getCheckInDate(), r.getCheckOutDate())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean datesOverlap(LocalDate start1, LocalDate end1,
-                                 LocalDate start2, LocalDate end2) {
-        return start1.isBefore(end2) && end1.isAfter(start2);
-    }
 }
