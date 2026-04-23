@@ -27,7 +27,7 @@ public class GuestService {
     }
     public List<Room>viewAvailableRoomsWithInBudget(double maxBudget)
     {
-        return roomService.getAvailableRoomsWithInBudget(maxBudget);
+        return roomService.getAvailableRoomsWithinBudget(maxBudget);
     }
     public Reservation makeReservation(Guest guest,String roomId,LocalDate checkIn,LocalDate checkOut)
     {
@@ -73,7 +73,7 @@ public class GuestService {
     {
         guest.setAddress(newAddress);
     }
-    public void updateRoomPreferences(Guest guest, RoomPreferences preferences)
+    public void updateRoomPreference(Guest guest, RoomPreferences preferences)
     {
         guest.setRoomPreferences(preferences);
     }
