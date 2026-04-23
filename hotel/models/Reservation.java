@@ -17,7 +17,6 @@ public class Reservation {
     private LocalDate checkOutDate;
     private ReservationStatus status;
     private double totalCost;
-    private LocalDate createdAt;
 
     public Reservation(String guestId, Room room, LocalDate checkInDate, LocalDate checkOutDate) {
         validateDates(checkInDate, checkOutDate);
@@ -29,12 +28,11 @@ public class Reservation {
         this.checkOutDate = checkOutDate;
         this.status = ReservationStatus.CONFIRMED;
         this.totalCost = calculateTotalCost(room, checkInDate, checkOutDate);
-        this.createdAt = LocalDate.now();
     }
 
     public Reservation(String reservationId, String guestId, String roomId,
                        LocalDate checkInDate, LocalDate checkOutDate,
-                       ReservationStatus status, double totalCost, LocalDate createdAt) {
+                       ReservationStatus status, double totalCost) {
         this.reservationId = reservationId;
         this.guestId = guestId;
         this.roomId = roomId;
@@ -42,7 +40,6 @@ public class Reservation {
         this.checkOutDate = checkOutDate;
         this.status = status;
         this.totalCost = totalCost;
-        this.createdAt = createdAt;
     }
 
     public static double calculateTotalCost(Room room, LocalDate checkIn, LocalDate checkOut) {
