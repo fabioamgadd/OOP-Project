@@ -5,7 +5,6 @@ import hotel.models.*;
 import hotel.services.GuestService;
 import hotel.utils.DisplayUtils;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
