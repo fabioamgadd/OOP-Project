@@ -18,10 +18,10 @@ public class GuestMenu {
     private Scanner scanner = new Scanner(System.in);
 
     private final GuestService guestService;
-    private       Guest        currentGuest;
+    private Guest currentGuest;
 
     public GuestMenu(Scanner scanner, GuestService guestService, Guest guest) {
-        this.scanner      = scanner;
+        this.scanner = scanner;
         this.guestService = guestService;
         this.currentGuest = guest;
     }
@@ -49,35 +49,25 @@ public class GuestMenu {
 
             if (Choice == 1) {
                 browseRooms();
-            }
-            else if (Choice == 2) {
+            } else if (Choice == 2) {
                 makeReservation();
-            }
-            else if (Choice == 3) {
+            } else if (Choice == 3) {
                 viewReservations();
-            }
-            else if (Choice == 4) {
+            } else if (Choice == 4) {
                 cancelReservation();
-            }
-            else if (Choice == 5) {
+            } else if (Choice == 5) {
                 payInvoice();
-            }
-            else if (Choice == 6) {
+            } else if (Choice == 6) {
                 viewInvoices();
-            }
-            else if (Choice == 7) {
+            } else if (Choice == 7) {
                 depositBalance();
-            }
-            else if (Choice == 8) {
+            } else if (Choice == 8) {
                 viewProfile();
-            }
-            else if (Choice == 9) {
+            } else if (Choice == 9) {
                 updatePreferences();
-            }
-            else if (Choice == 0) {
+            } else if (Choice == 0) {
                 running = false;
-            }
-            else {
+            } else {
                 DisplayUtils.printError("Invalid input, please try again.");
             }
         }
@@ -94,24 +84,22 @@ public class GuestMenu {
         int roomChoice = scanner.nextInt();
         scanner.nextLine();
 
-        List <Room> rooms;
+        List<Room> rooms;
 
         if (roomChoice == 2) {
             System.out.print("\nEnter room type (Single - Double - Suite - Deluxe - Family): ");
             String typeChoice = scanner.nextLine();
-            rooms = guestService.viewAvailableRoomsByType(typeChoice);        }
-        else if (roomChoice == 3) {
+            rooms = guestService.viewAvailableRoomsByType(typeChoice);
+        } else if (roomChoice == 3) {
             System.out.println("\nEnter max price per night (EGP): ");
             try {
                 double budget = Double.parseDouble(scanner.nextLine());
                 rooms = guestService.viewAvailableRoomsWithinBudget(budget);
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 DisplayUtils.printError("Invalid budget amount.");
                 return;
             }
-        }
-        else {
+        } else {
             rooms = guestService.viewAvailableRooms();
         }
 
@@ -121,11 +109,46 @@ public class GuestMenu {
 
     private void makeReservation() {
         DisplayUtils.printHeader("Make a Reservation");
+        System.out.println("");
+        LocalDate checkIn = promptDate("Check-In Date  (yyyy-MM-dd): ");
+        if (checkIn == null)
+            return;
+        LocalDate checkOut = promptDate("Check-Out Date (yyyy-MM-dd): ");
+        if (checkOut == null)
+            return;
 
-        List<Room> availableRooms = guestService.viewAvailableRooms();
+        if (!checkIn.isBefore(checkOut)) {
+            DisplayUtils.printError("Check-out must be after check-in.");
+            return;
+        }
+        if (checkIn.isBefore(LocalDate.now())) {
+            DisplayUtils.printError("Check-in cannot be in the past.");
+            return;
+        }
+
+        List<Room> structurallyAvailable = guestService.viewAvailableRooms();
+        List<Room> availableRooms = new java.util.ArrayList<>();
+
+        for (Room r : structurallyAvailable) {
+            boolean overlap = false;
+            for (Reservation res : hotel.database.HotelDatabase.reservations) {
+                if (res.getRoomId().equals(r.getRoomId()) &&
+                        res.getStatus() != hotel.enums.ReservationStatus.CANCELLED &&
+                        res.getStatus() != hotel.enums.ReservationStatus.CHECKED_OUT) {
+
+                    if (checkIn.isBefore(res.getCheckOutDate()) && checkOut.isAfter(res.getCheckInDate())) {
+                        overlap = true;
+                        break;
+                    }
+                }
+            }
+            if (!overlap) {
+                availableRooms.add(r);
+            }
+        }
 
         if (availableRooms.isEmpty()) {
-            DisplayUtils.printError("No rooms available at this time.");
+            DisplayUtils.printError("No rooms available for these dates.");
             return;
         }
         DisplayUtils.printRooms(availableRooms);
@@ -145,17 +168,12 @@ public class GuestMenu {
             return;
         }
 
-        LocalDate checkIn  = promptDate("Check-In Date  (yyyy-MM-dd): ");
-        LocalDate checkOut = promptDate("Check-Out Date (yyyy-MM-dd): ");
-        if (checkIn == null || checkOut == null) return;
-
         try {
             Reservation res = guestService.makeReservation(currentGuest, roomId, checkIn, checkOut);
             DisplayUtils.printSuccess("Reservation created! ID: " + res.getReservationId());
             System.out.printf("Total cost: EGP %.2f for %d night(s)%n",
                     res.getTotalCost(), res.getNumberOfNights());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
@@ -169,13 +187,12 @@ public class GuestMenu {
     private void cancelReservation() {
         DisplayUtils.printHeader("Cancel Reservation");
         viewReservations();
-        System.out.print("\n  Enter Reservation ID to cancel: ");
+        System.out.print("\nEnter Reservation ID to cancel: ");
         String reservationId = scanner.nextLine();
         try {
             guestService.cancelReservation(currentGuest, reservationId);
             DisplayUtils.printSuccess("Reservation cancelled successfully.");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
@@ -199,31 +216,30 @@ public class GuestMenu {
 
             if (paymentMethod == 1) {
                 invoice = guestService.checkoutWithBalance(currentGuest, reservationId);
-            }
-            else if (paymentMethod == 2) {
-                invoice = guestService.checkoutWithExternalPayment(reservationId, invoice_amountDue(reservationId), PaymentMethod.CASH);
-            }
-            else if (paymentMethod == 3) {
-                invoice = guestService.checkoutWithExternalPayment(reservationId, invoice_amountDue(reservationId), PaymentMethod.CREDIT_CARD);
-            }
-            else if (paymentMethod == 4) {
-                invoice = guestService.checkoutWithExternalPayment(reservationId, invoice_amountDue(reservationId), PaymentMethod.DEBIT_CARD);
-            }
-            else {
+            } else if (paymentMethod == 2) {
+                invoice = guestService.checkoutWithExternalPayment(reservationId, invoice_amountDue(reservationId),
+                        PaymentMethod.CASH);
+            } else if (paymentMethod == 3) {
+                invoice = guestService.checkoutWithExternalPayment(reservationId, invoice_amountDue(reservationId),
+                        PaymentMethod.CREDIT_CARD);
+            } else if (paymentMethod == 4) {
+                invoice = guestService.checkoutWithExternalPayment(reservationId, invoice_amountDue(reservationId),
+                        PaymentMethod.DEBIT_CARD);
+            } else {
                 DisplayUtils.printError("Invalid payment method.");
                 return;
             }
 
             DisplayUtils.printSuccess("Payment successful!");
             System.out.println(invoice.getFormattedInvoice());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
 
     private double invoice_amountDue(String reservationId) {
-        // Helper — get the amount due for a reservation (so external payments know how much to charge)
+        // Helper — get the amount due for a reservation (so external payments know how
+        // much to charge)
         List<Invoice> myInvoices = guestService.viewMyInvoices(currentGuest);
         for (Invoice inv : myInvoices) {
             if (inv.getReservationId().equals(reservationId) && !inv.isPaid()) {
@@ -253,12 +269,11 @@ public class GuestMenu {
         try {
             double amount = Double.parseDouble(scanner.nextLine());
             guestService.depositBalance(currentGuest, amount);
-            DisplayUtils.printSuccess(String.format("Deposited EGP %.2f. New balance: EGP %.2f", amount, currentGuest.getBalance()));
-        }
-        catch (NumberFormatException e) {
+            DisplayUtils.printSuccess(
+                    String.format("Deposited EGP %.2f. New balance: EGP %.2f", amount, currentGuest.getBalance()));
+        } catch (NumberFormatException e) {
             DisplayUtils.printError("Invalid amount.");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
@@ -269,7 +284,7 @@ public class GuestMenu {
         System.out.println("Gender: " + currentGuest.getGender());
         System.out.println("Date of Birth: " + currentGuest.getDateOfBirth());
         System.out.println("Address: " + currentGuest.getAddress());
-        System.out.printf ("Balance: EGP %.2f%n", currentGuest.getBalance());
+        System.out.printf("Balance: EGP %.2f%n", currentGuest.getBalance());
         System.out.println("Preferences: " + currentGuest.getRoomPreferences());
     }
 
@@ -288,8 +303,7 @@ public class GuestMenu {
         if (!floorStr.isEmpty()) {
             try {
                 floor = Integer.parseInt(floorStr);
-            }
-            catch (NumberFormatException ignored) {
+            } catch (NumberFormatException ignored) {
             }
         }
 
@@ -307,8 +321,7 @@ public class GuestMenu {
         System.out.print(prompt);
         try {
             return LocalDate.parse(scanner.nextLine().trim(), theDate);
-        }
-        catch (DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             DisplayUtils.printError("Invalid date format. Use yyyy-MM-dd.");
             return null;
         }
