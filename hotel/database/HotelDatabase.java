@@ -32,39 +32,39 @@ public class HotelDatabase {
     }
 
     private static void seedAmenities() {
-        amenities.add(new Amenity("a101", "WiFi",         "High-speed wireless internet",      10.0));
-        amenities.add(new Amenity("a102", "TV",           "55\" Smart TV with cable channels",  5.0));
-        amenities.add(new Amenity("a103", "Mini-bar",     "Stocked mini-bar (pay-per-use)",    20.0));
-        amenities.add(new Amenity("a104", "Air Conditioning", "Climate-controlled room",        0.0));
-        amenities.add(new Amenity("a105", "Jacuzzi",      "Private in-room jacuzzi",           50.0));
-        amenities.add(new Amenity("a106", "Breakfast",    "Daily continental breakfast",       30.0));
-        amenities.add(new Amenity("a107", "Safe",         "In-room electronic safe",            0.0));
-        amenities.add(new Amenity("a108", "Gym Access",   "Full access to the hotel gym",      15.0));
+        amenities.add(new Amenity("a001", "WiFi",         "High-speed wireless internet",      10.0));
+        amenities.add(new Amenity("a002", "TV",           "55\" Smart TV with cable channels",  5.0));
+        amenities.add(new Amenity("a003", "Mini-bar",     "Stocked mini-bar (pay-per-use)",    20.0));
+        amenities.add(new Amenity("a004", "Air Conditioning", "Climate-controlled room",        0.0));
+        amenities.add(new Amenity("a005", "Jacuzzi",      "Private in-room jacuzzi",           50.0));
+        amenities.add(new Amenity("a006", "Breakfast",    "Daily continental breakfast",       30.0));
+        amenities.add(new Amenity("a007", "Safe",         "In-room electronic safe",            0.0));
+        amenities.add(new Amenity("a008", "Gym Access",   "Full access to the hotel gym",      15.0));
     }
 
     private static void seedRoomTypes() {
-        roomTypes.add(new RoomType("rt101", "Single",  "Cozy room for one guest",              500.0,  1));
-        roomTypes.add(new RoomType("rt102", "Double",  "Comfortable room for two guests",      800.0,  2));
-        roomTypes.add(new RoomType("rt103", "Suite",   "Luxurious suite with panoramic view", 2000.0,  4));
-        roomTypes.add(new RoomType("rt104", "Deluxe",  "Upscale room with premium finishes",  1200.0,  2));
-        roomTypes.add(new RoomType("rt105", "Family",  "Spacious room for families",          1500.0,  6));
+        roomTypes.add(new RoomType("rt001", "Single",  "Cozy room for one guest",              500.0,  1));
+        roomTypes.add(new RoomType("rt002", "Double",  "Comfortable room for two guests",      800.0,  2));
+        roomTypes.add(new RoomType("rt003", "Suite",   "Luxurious suite with panoramic view", 2000.0,  4));
+        roomTypes.add(new RoomType("rt004", "Deluxe",  "Upscale room with premium finishes",  1200.0,  2));
+        roomTypes.add(new RoomType("rt005", "Family",  "Spacious room for families",          1500.0,  6));
     }
 
     private static void seedRooms() {
-        RoomType single  = findRoomTypeById("rt101");
-        RoomType doubleT = findRoomTypeById("rt102");
-        RoomType suite   = findRoomTypeById("rt103");
-        RoomType deluxe  = findRoomTypeById("rt104");
-        RoomType family  = findRoomTypeById("rt105");
+        RoomType single  = findRoomTypeById("rt001");
+        RoomType doubleT = findRoomTypeById("rt002");
+        RoomType suite   = findRoomTypeById("rt003");
+        RoomType deluxe  = findRoomTypeById("rt004");
+        RoomType family  = findRoomTypeById("rt005");
 
-        Amenity wifi   = findAmenityById("a101");
-        Amenity tv     = findAmenityById("a102");
-        Amenity ac     = findAmenityById("a104");
-        Amenity minibar= findAmenityById("a103");
-        Amenity jacuzzi= findAmenityById("a105");
-        Amenity brkfst = findAmenityById("a106");
-        Amenity safe   = findAmenityById("a107");
-        Amenity gym    = findAmenityById("a108");
+        Amenity wifi   = findAmenityById("a001");
+        Amenity tv     = findAmenityById("a002");
+        Amenity ac     = findAmenityById("a004");
+        Amenity minibar= findAmenityById("a003");
+        Amenity jacuzzi= findAmenityById("a005");
+        Amenity brkfst = findAmenityById("a006");
+        Amenity safe   = findAmenityById("a007");
+        Amenity gym    = findAmenityById("a008");
 
         //Floor 1 for single rooms
         Room r101 = new Room("101", 1, single);  r101.addAmenity(wifi); r101.addAmenity(tv); r101.addAmenity(ac);
@@ -96,7 +96,7 @@ public class HotelDatabase {
     }
 
     private static void seedStaff() {
-        // Admin 
+        // Admin
         staffMembers.add(new Admin(
                 "staff-admin-001", "admin", "Admin@123",
                 LocalDate.of(1985, 3, 10), 40, Gender.MALE));
@@ -106,14 +106,14 @@ public class HotelDatabase {
                 "staff-recep-001", "sara_r","Recep@123",
                 LocalDate.of(1995, 7, 22), 40, Gender.FEMALE));
 
-        // Receptionist 2 
+        // Receptionist 2
         staffMembers.add(new Receptionist(
                 "staff-recep-002", "ahmed_r", "Recep@456",
                 LocalDate.of(1993, 11, 5), 40, Gender.MALE));
     }
 
     private static void seedGuests() {
-        // Guest 1 
+        // Guest 1
         Guest g1 = new Guest(
                 "guest-001", "john_doe","Guest@123",
                 LocalDate.of(1990, 4, 15), 3000.0,
@@ -121,7 +121,7 @@ public class HotelDatabase {
                 new RoomPreference("Double", 2, false, false));
         guests.add(g1);
 
-        // Guest 2 
+        // Guest 2
         Guest g2 = new Guest(
                 "guest-002", "layla_m", "Guest@456",
                 LocalDate.of(1997, 9, 30), 7500.0,
@@ -129,7 +129,7 @@ public class HotelDatabase {
                 new RoomPreference("Suite", 5, false, false));
         guests.add(g2);
 
-        // Guest 3 
+        // Guest 3
         Guest g3 = new Guest(
                 "guest-003", "omar_k","Guest@789",
                 LocalDate.of(1985, 1, 20), 1200.0,
