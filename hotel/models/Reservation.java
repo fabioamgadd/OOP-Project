@@ -5,9 +5,10 @@ import hotel.enums.ReservationStatus;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Reservation {
+
+    private static int idCounter = 1;
 
     private String reservationId;
     private String guestId;
@@ -15,15 +16,13 @@ public class Reservation {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private ReservationStatus status;
-    private double totalCost;         
+    private double totalCost;
     private LocalDate createdAt;
-
-  
 
     public Reservation(String guestId, Room room, LocalDate checkInDate, LocalDate checkOutDate) {
         validateDates(checkInDate, checkOutDate);
 
-        this.reservationId = UUID.randomUUID().toString();
+        this.reservationId = "R" + String.format("%03d", idCounter++);
         this.guestId = guestId;
         this.roomId = room.getRoomId();
         this.checkInDate = checkInDate;
@@ -33,8 +32,8 @@ public class Reservation {
         this.createdAt = LocalDate.now();
     }
 
-    
-    public Reservation(String reservationId, String guestId, String roomId, LocalDate checkInDate, LocalDate checkOutDate,
+    public Reservation(String reservationId, String guestId, String roomId,
+                       LocalDate checkInDate, LocalDate checkOutDate,
                        ReservationStatus status, double totalCost, LocalDate createdAt) {
         this.reservationId = reservationId;
         this.guestId = guestId;
@@ -46,19 +45,16 @@ public class Reservation {
         this.createdAt = createdAt;
     }
 
-    
     public static double calculateTotalCost(Room room, LocalDate checkIn, LocalDate checkOut) {
         long nights = ChronoUnit.DAYS.between(checkIn, checkOut);
         if (nights <= 0) throw new IllegalArgumentException("Check-out must be after check-in.");
         return room.getTotalPricePerNight() * nights;
     }
 
-   
     public long getNumberOfNights() {
         return ChronoUnit.DAYS.between(checkInDate, checkOutDate);
     }
 
-    
     public boolean cancel() {
         if (status == ReservationStatus.CONFIRMED || status == ReservationStatus.PENDING) {
             this.status = ReservationStatus.CANCELLED;
@@ -67,7 +63,6 @@ public class Reservation {
         return false;
     }
 
-    
     public boolean checkIn() {
         if (status == ReservationStatus.CONFIRMED) {
             this.status = ReservationStatus.CHECKED_IN;
@@ -76,7 +71,6 @@ public class Reservation {
         return false;
     }
 
-    
     public boolean checkOut() {
         if (status == ReservationStatus.CHECKED_IN) {
             this.status = ReservationStatus.CHECKED_OUT;
@@ -84,8 +78,6 @@ public class Reservation {
         }
         return false;
     }
-
-
 
     private static void validateDates(LocalDate checkIn, LocalDate checkOut) {
         if (checkIn == null || checkOut == null) {
@@ -99,27 +91,37 @@ public class Reservation {
         }
     }
 
-  
+    public String getReservationId() {
+        return reservationId;
+    }
 
-    public String getReservationId() { return reservationId; }
-    public String getGuestId() { return guestId; }
-    public String getRoomId() { return roomId; }
+    public String getGuestId() {
+        return guestId;
+    }
 
-    public LocalDate getCheckInDate() { return checkInDate; }
-    public void setCheckInDate(LocalDate checkInDate) { this.checkInDate = checkInDate; }
+    public String getRoomId() {
+        return roomId;
+    }
 
-    public LocalDate getCheckOutDate() { return checkOutDate; }
-    public void setCheckOutDate(LocalDate checkOutDate) { this.checkOutDate = checkOutDate; }
+    public LocalDate getCheckInDate() {
+        return checkInDate;
+    }
 
-    public ReservationStatus getStatus() { return status; }
-    public void setStatus(ReservationStatus status) { this.status = status; }
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
 
-    public double getTotalCost() { return totalCost; }
-    public void setTotalCost(double totalCost) { this.totalCost = totalCost; }
+    public ReservationStatus getStatus() {
+        return status;
+    }
+    public void setStatus(ReservationStatus status) {
+        this.status = status;
+    }
 
-    public LocalDate getCreatedAt() { return createdAt; }
+    public double getTotalCost() {
+        return totalCost;
+    }
 
- 
 
     @Override
     public String toString() {
@@ -137,5 +139,8 @@ public class Reservation {
         return Objects.equals(reservationId, that.reservationId);
     }
 
-   
+    @Override
+    public int hashCode() {
+        return Objects.hash(reservationId);
+    }
 }
