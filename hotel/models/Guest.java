@@ -15,7 +15,7 @@ public class Guest implements Authenticatable {
     private String address;
     Gender gender;
     RoomPreference preference;
-    private static int idCounter;
+    private static int idCounter=0;
 
     public Guest( String username, String password, String dob, double balance, String address, Gender gender, RoomPreference preference) {
         this.guestId = "G" + String.format("%03d",idCounter++);
