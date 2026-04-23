@@ -25,7 +25,7 @@ public class GuestService {
     {
         return roomService.getAvailableRoomsByType(typeName);
     }
-    public List<Room>viewAvailableRoomsWithInBudget(double maxBudget)
+    public List<Room>viewAvailableRoomsWithinBudget(double maxBudget)
     {
         return roomService.getAvailableRoomsWithinBudget(maxBudget);
     }
@@ -34,10 +34,6 @@ public class GuestService {
         return reservationService.makeReservation(guest.getGuestId(),roomId,checkIn,checkOut);
     }
     public List<Reservation>viewMyReservations(Guest guest)
-    {
-        return reservationService.getReservationsByGuest(guest.getGuestId());
-    }
-    public List<Reservation>viewMyActiveReservations(Guest guest)
     {
         return reservationService.getReservationsByGuest(guest.getGuestId());
     }
@@ -68,10 +64,6 @@ public class GuestService {
     public List<Invoice>viewMyInvoices(Guest guest)
     {
         return invoiceService.getInvoicesByGuest(guest.getGuestId());
-    }
-    public void updateAddress(Guest guest, String newAddress)
-    {
-        guest.setAddress(newAddress);
     }
     public void updateRoomPreferences(Guest guest, RoomPreference preferences)
     {
