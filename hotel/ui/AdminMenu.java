@@ -49,56 +49,39 @@ public class AdminMenu {
 
             if (Choice == 1) {
                 viewRooms();
-            }
-            else if (Choice == 2) {
+            } else if (Choice == 2) {
                 addRoom();
-            }
-            else if (Choice == 3) {
+            } else if (Choice == 3) {
                 updateRoom();
-            }
-            else if (Choice == 4) {
+            } else if (Choice == 4) {
                 deleteRoom();
-            }
-            else if (Choice == 5) {
+            } else if (Choice == 5) {
                 viewRoomTypes();
-            }
-            else if (Choice == 6) {
+            } else if (Choice == 6) {
                 addRoomType();
-            }
-            else if (Choice == 7) {
+            } else if (Choice == 7) {
                 updateRoomType();
-            }
-            else if (Choice == 8) {
+            } else if (Choice == 8) {
                 deleteRoomType();
-            }
-            else if (Choice == 9) {
+            } else if (Choice == 9) {
                 viewAmenities();
-            }
-            else if (Choice == 10) {
+            } else if (Choice == 10) {
                 addAmenity();
-            }
-            else if (Choice == 11) {
+            } else if (Choice == 11) {
                 updateAmenity();
-            }
-            else if (Choice == 12) {
+            } else if (Choice == 12) {
                 deleteAmenity();
-            }
-            else if (Choice == 13) {
+            } else if (Choice == 13) {
                 viewGuests();
-            }
-            else if (Choice == 14) {
+            } else if (Choice == 14) {
                 viewReservations();
-            }
-            else if (Choice == 15) {
+            } else if (Choice == 15) {
                 viewInvoices();
-            }
-            else if (Choice == 16) {
+            } else if (Choice == 16) {
                 viewRevenue();
-            }
-            else if (Choice == 0) {
+            } else if (Choice == 0) {
                 running = false;
-            }
-            else {
+            } else {
                 DisplayUtils.printError("Invalid option.");
             }
         }
@@ -113,29 +96,46 @@ public class AdminMenu {
     private void addRoom() {
         DisplayUtils.printHeader("Add Room");
 
-        System.out.print("Room ID: ");
-        String roomId = scanner.nextLine();
-
-        System.out.print("Floor number: ");
+        System.out.print("\nFloor number: ");
         int floor;
         try {
             floor = Integer.parseInt(scanner.nextLine());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError("Invalid floor.");
             return;
         }
+
+        int maxRoomNum = floor * 100;
+        for (Room r : adminService.getAllRooms()) {
+            if (r.getFloorNumber() == floor) {
+                try {
+                    int id = Integer.parseInt(r.getRoomId());
+                    if (id > maxRoomNum) {
+                        maxRoomNum = id;
+                    }
+                } catch (NumberFormatException ignored) {
+                }
+            }
+        }
+        String roomId = String.valueOf(maxRoomNum + 1);
+        System.out.println("Room ID: " + roomId);
 
         System.out.println("Available Room Types:");
         List<RoomType> types = adminService.getAllRoomTypes();
         for (int i = 0; i < types.size(); i++) {
             RoomType rt = types.get(i);
-            System.out.println(rt.getTypeId() + " - " + rt.getTypeName());
+            System.out.println("- " + rt.getTypeName());
         }
 
-        System.out.print("Enter Room Type ID: ");
-        String typeId = scanner.nextLine();
-        RoomType rt = adminService.getRoomType(typeId);
+        System.out.print("Enter Room Type Name: ");
+        String typeName = scanner.nextLine().trim();
+        RoomType rt = null;
+        for (RoomType roomType : types) {
+            if (roomType.getTypeName().equalsIgnoreCase(typeName)) {
+                rt = roomType;
+                break;
+            }
+        }
 
         if (rt == null) {
             DisplayUtils.printError("Room type not found.");
@@ -145,8 +145,7 @@ public class AdminMenu {
         try {
             adminService.addRoom(new Room(roomId, floor, rt));
             DisplayUtils.printSuccess("Room '" + roomId + "' added successfully.");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
@@ -159,8 +158,7 @@ public class AdminMenu {
 
         if (adminService.deleteRoom(roomId)) {
             DisplayUtils.printSuccess("Room '" + roomId + "' deleted.");
-        }
-        else {
+        } else {
             DisplayUtils.printError("Room not found.");
         }
     }
@@ -183,8 +181,7 @@ public class AdminMenu {
         if (!floorInput.isEmpty()) {
             try {
                 room.setFloorNumber(Integer.parseInt(floorInput));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 DisplayUtils.printError("Invalid floor.");
                 return;
             }
@@ -212,12 +209,18 @@ public class AdminMenu {
         List<RoomType> roomTypes = adminService.getAllRoomTypes();
         for (int i = 0; i < roomTypes.size(); i++) {
             RoomType rt = roomTypes.get(i);
-            System.out.println(rt.getTypeId() + " — " + rt.getTypeName() + " (" + rt.getBasePricePerNight() + "/night)");
+            System.out.println("- " + rt.getTypeName() + " (" + rt.getBasePricePerNight() + "/night)");
         }
-        System.out.printf("New Room Type ID (blank to keep %s): ", room.getRoomType().getTypeName());
-        String roomTypeId = scanner.nextLine().trim();
-        if (!roomTypeId.isEmpty()) {
-            RoomType roomType = adminService.getRoomType(roomTypeId);
+        System.out.printf("New Room Type Name (blank to keep %s): ", room.getRoomType().getTypeName());
+        String typeName = scanner.nextLine().trim();
+        if (!typeName.isEmpty()) {
+            RoomType roomType = null;
+            for (RoomType rt : roomTypes) {
+                if (rt.getTypeName().equalsIgnoreCase(typeName)) {
+                    roomType = rt;
+                    break;
+                }
+            }
             if (roomType == null) {
                 DisplayUtils.printError("Room type not found.");
                 return;
@@ -271,8 +274,7 @@ public class AdminMenu {
 
         if (adminService.updateRoom(room)) {
             DisplayUtils.printSuccess("Room updated successfully.");
-        }
-        else {
+        } else {
             DisplayUtils.printError("Room update failed.");
         }
     }
@@ -280,11 +282,15 @@ public class AdminMenu {
     private void viewRoomTypes() {
         DisplayUtils.printHeader("Room Types");
         List<RoomType> types = adminService.getAllRoomTypes();
-        if (types.isEmpty()) { System.out.println("  No room types found."); return; }
+        if (types.isEmpty()) {
+            System.out.println("  No room types found.");
+            return;
+        }
         System.out.println("ID    Name    Price/Night    MaxOcc");
         for (int i = 0; i < types.size(); i++) {
             RoomType rt = types.get(i);
-            System.out.println(rt.getTypeId() + "    " + rt.getTypeName() + "    " + rt.getBasePricePerNight() + "    " + rt.getMaxOccupancy());
+            System.out.println(rt.getTypeId() + "    " + rt.getTypeName() + "    " + rt.getBasePricePerNight() + "    "
+                    + rt.getMaxOccupancy());
         }
     }
 
@@ -301,8 +307,7 @@ public class AdminMenu {
         double price;
         try {
             price = Double.parseDouble(scanner.nextLine());
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             DisplayUtils.printError("Invalid price.");
             return;
         }
@@ -320,8 +325,7 @@ public class AdminMenu {
             RoomType rt = new RoomType(name, desc, price, max);
             adminService.addRoomType(rt);
             DisplayUtils.printSuccess("Room type added.");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
@@ -368,8 +372,7 @@ public class AdminMenu {
         if (!priceInput.isEmpty()) {
             try {
                 roomType.setBasePricePerNight(Double.parseDouble(priceInput));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 DisplayUtils.printError("Invalid base price.");
                 return;
             }
@@ -380,8 +383,7 @@ public class AdminMenu {
         if (!occupancyInput.isEmpty()) {
             try {
                 roomType.setMaxOccupancy(Integer.parseInt(occupancyInput));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 DisplayUtils.printError("Invalid max occupancy.");
                 return;
             }
@@ -389,8 +391,7 @@ public class AdminMenu {
 
         if (adminService.updateRoomType(roomType)) {
             DisplayUtils.printSuccess("Room type updated successfully.");
-        }
-        else {
+        } else {
             DisplayUtils.printError("Room type update failed.");
         }
     }
@@ -405,7 +406,8 @@ public class AdminMenu {
         System.out.println("ID    Name    Description    Cost/Night");
         for (int i = 0; i < ams.size(); i++) {
             Amenity a = ams.get(i);
-            System.out.println(a.getAmenityId() + "    " + a.getName() + "    " + a.getDescription() + "    " + a.getExtraCostPerNight());
+            System.out.println(a.getAmenityId() + "    " + a.getName() + "    " + a.getDescription() + "    "
+                    + a.getExtraCostPerNight());
         }
     }
 
@@ -422,8 +424,7 @@ public class AdminMenu {
         double cost;
         try {
             cost = Double.parseDouble(scanner.nextLine());
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             DisplayUtils.printError("Invalid cost.");
             return;
         }
@@ -432,8 +433,7 @@ public class AdminMenu {
             Amenity amenity = new Amenity(name, desc, cost);
             adminService.addAmenity(amenity);
             DisplayUtils.printSuccess("Amenity '" + name + "' added. ID: " + amenity.getAmenityId());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             DisplayUtils.printError(e.getMessage());
         }
     }
@@ -480,8 +480,7 @@ public class AdminMenu {
         if (!costInput.isEmpty()) {
             try {
                 amenity.setExtraCostPerNight(Double.parseDouble(costInput));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 DisplayUtils.printError("Invalid extra cost.");
                 return;
             }
