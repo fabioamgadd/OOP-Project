@@ -15,21 +15,23 @@ abstract class Staff {
     Role role;
     Gender gender;
     private static int idCounter=0;
-     protected Staff( String staffId1, String username, String password, Role role, int workingHours , Gender gender){
+     protected Staff( String staffId1, String username, String password,String dob, Role role, int workingHours , Gender gender){
          this.staffId = staffId1;
          this. username=username;
          this. password=password;
          this.role=role;
          this.workingHours=workingHours;
          this.gender=gender;
+         this.dob=dob;
      }
-    protected Staff(  String username, String password, Role role, int workingHours , Gender gender){
+    protected Staff(  String username, String password,String dob, Role role, int workingHours , Gender gender){
          this.staffId = "S"+ String.format("%03d",idCounter++);
          this. username=username;
          this. password=password;
          this.role=role;
          this.workingHours=workingHours;
          this.gender=gender;
+        this.dob=dob;
      }
 
 
