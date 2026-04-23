@@ -2,7 +2,7 @@ package hotel.models;
 
 public class RoomPreference {
     private String preferredRoomTypeName;
-    private int preferredFloor;
+    private Integer preferredFloor;
     private boolean smokingRoom;
     private boolean  accessibilityRequired;
 
