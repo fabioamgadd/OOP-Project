@@ -27,12 +27,6 @@ public class Amenity {
     }
 
 
-    public static String generateId() {
-        int number = 109 + random.nextInt(900);
-        return "a" + number;
-    }
-
-
     public String getAmenityId() {
         return amenityId;
     }
