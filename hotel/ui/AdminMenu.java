@@ -23,6 +23,7 @@ public class AdminMenu {
         boolean running = true;
         while (running) {
             DisplayUtils.printHeader("Admin Panel — " + currentAdmin.getUsername());
+            System.out.println("");
             System.out.println("1. View All Rooms");
             System.out.println("2. Add Room");
             System.out.println("3. Update Room");
