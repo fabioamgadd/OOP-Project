@@ -5,6 +5,7 @@ import hotel.models.*;
 import hotel.services.GuestService;
 import hotel.utils.DisplayUtils;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -29,6 +30,7 @@ public class GuestMenu {
         boolean running = true;
         while (running) {
             DisplayUtils.printHeader("Guest Dashboard — Welcome, " + currentGuest.getUsername());
+            System.out.println("");
             System.out.println("1. Browse Available Rooms");
             System.out.println("2. Make a Reservation");
             System.out.println("3. View My Reservations");
@@ -39,7 +41,7 @@ public class GuestMenu {
             System.out.println("8. View My Profile");
             System.out.println("9. Update Room Preferences");
             System.out.println("0. Logout");
-            System.out.println("\nChoice: ");
+            System.out.print("\nChoice: ");
 
             int Choice = scanner.nextInt();
             scanner.nextLine();
@@ -72,6 +74,9 @@ public class GuestMenu {
             else if (Choice == 9) {
                 updatePreferences();
             }
+            else if (Choice == 0) {
+                running = false;
+            }
             else {
                 DisplayUtils.printError("Invalid input, please try again.");
             }
@@ -85,14 +90,14 @@ public class GuestMenu {
         System.out.println("1. All");
         System.out.println("2. Room Type");
         System.out.println("3. Max Budget");
-        System.out.println("\nChoice: ");
+        System.out.print("\nChoice: ");
         int roomChoice = scanner.nextInt();
         scanner.nextLine();
 
         List <Room> rooms;
 
         if (roomChoice == 2) {
-            System.out.println("\nEnter room type (Single - Double - Suite - Deluxe - Family): ");
+            System.out.print("\nEnter room type (Single - Double - Suite - Deluxe - Family): ");
             String typeChoice = scanner.nextLine();
             rooms = guestService.viewAvailableRoomsByType(typeChoice);        }
         else if (roomChoice == 3) {
@@ -125,7 +130,7 @@ public class GuestMenu {
         }
         DisplayUtils.printRooms(availableRooms);
 
-        System.out.print("\n  Enter Room ID from the list above: ");
+        System.out.print("\nEnter Room ID from the list above: ");
         String roomId = scanner.nextLine().trim();
 
         Room selectedRoom = null;
@@ -140,14 +145,14 @@ public class GuestMenu {
             return;
         }
 
-        LocalDate checkIn  = promptDate("  Check-In Date  (yyyy-MM-dd): ");
-        LocalDate checkOut = promptDate("  Check-Out Date (yyyy-MM-dd): ");
+        LocalDate checkIn  = promptDate("Check-In Date  (yyyy-MM-dd): ");
+        LocalDate checkOut = promptDate("Check-Out Date (yyyy-MM-dd): ");
         if (checkIn == null || checkOut == null) return;
 
         try {
             Reservation res = guestService.makeReservation(currentGuest, roomId, checkIn, checkOut);
             DisplayUtils.printSuccess("Reservation created! ID: " + res.getReservationId());
-            System.out.printf("  Total cost: EGP %.2f for %d night(s)%n",
+            System.out.printf("Total cost: EGP %.2f for %d night(s)%n",
                     res.getTotalCost(), res.getNumberOfNights());
         }
         catch (Exception e) {
@@ -179,8 +184,8 @@ public class GuestMenu {
         DisplayUtils.printHeader("Pay Invoice");
         System.out.print("Enter Reservation ID: ");
         String reservationId = scanner.nextLine();
-
-        System.out.println("Payment method");
+        System.out.println("");
+        System.out.println("Payment Method:");
         System.out.println("\n1. My Balance");
         System.out.println("2. Cash");
         System.out.println("3. Credit Card");
