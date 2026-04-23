@@ -28,10 +28,20 @@ public class ReservationService {
             throw new IllegalStateException("Room '" + roomId + "' is currently not available.");
         }
 
+        for (Reservation existing : HotelDatabase.reservations) {
+            if (existing.getRoomId().equals(roomId) &&
+                existing.getStatus() != hotel.enums.ReservationStatus.CANCELLED &&
+                existing.getStatus() != hotel.enums.ReservationStatus.CHECKED_OUT) {
+                
+                if (checkInDate.isBefore(existing.getCheckOutDate()) && checkOutDate.isAfter(existing.getCheckInDate())) {
+                    throw new IllegalStateException("Room '" + roomId + "' is already booked for these dates.");
+                }
+            }
+        }
+
         Reservation res = new Reservation(guestId, room, checkInDate, checkOutDate);
         HotelDatabase.reservations.add(res);
 
-        roomService.markUnavailable(roomId);
         invoiceService.createInvoice(res.getReservationId(), guestId, res.getTotalCost());
 
         return res;
@@ -86,7 +96,6 @@ public class ReservationService {
             throw new IllegalStateException("Reservation cannot be cancelled in its current status: " + res.getStatus());
         }
 
-        roomService.markAvailable(res.getRoomId());
         invoiceService.voidInvoiceForReservation(reservationId);
 
         return true;
@@ -108,7 +117,6 @@ public class ReservationService {
         if (res == null) throw new IllegalArgumentException("Reservation not found.");
         boolean ok = res.checkOut();
         if (ok) {
-            roomService.markAvailable(res.getRoomId());
         }
         return ok;
     }
