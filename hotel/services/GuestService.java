@@ -73,7 +73,7 @@ public class GuestService {
     {
         guest.setAddress(newAddress);
     }
-    public void updateRoomPreference(Guest guest, RoomPreferences preferences)
+    public void updateRoomPreferences(Guest guest, RoomPreference preferences)
     {
         guest.setRoomPreferences(preferences);
     }
