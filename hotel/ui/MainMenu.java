@@ -4,9 +4,6 @@ import hotel.enums.Gender;
 import hotel.interfaces.Authenticatable;
 import hotel.models.*;
 import hotel.services.*;
-import hotel.ui.AdminMenu;
-import hotel.ui.GuestMenu;
-import hotel.ui.ReceptionistMenu;
 import hotel.utils.DisplayUtils;
 
 import java.time.LocalDate;
@@ -43,7 +40,7 @@ public class MainMenu {
             System.out.println("1. Login");
             System.out.println("2. Register");
             System.out.println("3. Exit");
-            System.out.println("\nEnter Choice:" + "\n");
+            System.out.print("\nEnter Choice: ");
             int Choice = scanner.nextInt();
             scanner.nextLine();
 
@@ -65,9 +62,9 @@ public class MainMenu {
     private void handleLogin() {
         DisplayUtils.printHeader("Login");
 
-        System.out.println("\nUsername: ");
+        System.out.print("\nUsername: ");
         String username = scanner.nextLine();
-        System.out.print("  Password: ");
+        System.out.print("Password: ");
         String password = scanner.nextLine();
 
         Authenticatable user = authService.login(username, password);
@@ -99,11 +96,11 @@ public class MainMenu {
     private void handleRegister() {
         DisplayUtils.printHeader("Guest Register");
 
-        System.out.println("\nEnter Username: ");
+        System.out.print("\nEnter Username: ");
         String username = scanner.nextLine();
-        System.out.println("Enter Password: ");
+        System.out.print("Enter Password: ");
         String password = scanner.nextLine();
-        System.out.println("Enter Date of Birth (yyyy-mm-dd): ");
+        System.out.print("Enter Date of Birth (yyyy-mm-dd): ");
         LocalDate DOB;
 
         try {
@@ -114,9 +111,9 @@ public class MainMenu {
             return;
         }
 
-        System.out.println("Address: ");
+        System.out.print("Address: ");
         String address = scanner.nextLine();
-        System.out.println("Gender (M/F): ");
+        System.out.print("Gender (M/F): ");
         String inputGender = scanner.nextLine().toUpperCase();
         Gender gender;
         if (inputGender.equals("M")) {
