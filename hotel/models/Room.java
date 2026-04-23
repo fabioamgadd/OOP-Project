@@ -63,10 +63,6 @@ public class Room {
         return roomId;
     }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
-    }
-
     public int getFloorNumber() {
         return floorNumber;
     }
