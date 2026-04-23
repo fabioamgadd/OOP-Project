@@ -5,8 +5,8 @@ public class Amenity {
     private String name;
     private String description;
     private double extraCostPerNight;
+    private static int counterId;
 
-    private static final Random random = new Random();
 
     public Amenity(){
 
@@ -20,7 +20,7 @@ public class Amenity {
     }
 
     public Amenity(String name, String description, double extraCostPerNight) {
-        this.amenityId = generateId();
+        this.amenityId = "a" + String.format("%03d",counterId++) ;
         this.name = name;
         this.description = description;
         this.extraCostPerNight = extraCostPerNight;
