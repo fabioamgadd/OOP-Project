@@ -6,9 +6,8 @@ public class DisplayUtils
 {
     public static void printHeader(String title)
     {
-        System.out.println("\n");
+        System.out.println(" ");
         System.out.println("⭐ " + title + " ⭐");
-        System.out.println("\n");
     }
 
     public static void printRooms(List<Room> rooms)
@@ -17,7 +16,7 @@ public class DisplayUtils
         {
             System.out.println("No rooms found");
         }
-        System.out.printf("Room Id:","Floor","Type","Available","Price/Night","Amenities");
+        System.out.printf("%-12s %-8s %-12s %-12s %-15s %s%n","Room Id:","Floor","Type","Available","Price/Night","Amenities");
         for(int i=0;i<rooms.size();i++)
         {
             Room r =rooms.get(i);
@@ -41,7 +40,7 @@ public class DisplayUtils
                 }
                 amenities=result;
             }
-            System.out.printf(r.getRoomId(),r.getFloorNumber(),r.getRoomType(),r.getTypeName(),r.isAvailable()?"Yes":"No",
+            System.out.printf("%-12s %-8d %-12s %-12s %-15.2f %s%n","r.getRoomId(),r.getFloorNumber(),r.getRoomType().getTypeName(),r.isAvailable()?"Yes":"No",
                     r.getTotalPricePerNight(),amenities);
         }
     }
@@ -51,11 +50,11 @@ public class DisplayUtils
         {
             System.out.println("No reservations found");
         }
-        System.out.printf("Reservation Id:","Room","Check in","Check out","Cost","Status");
+        System.out.printf("%-18s %-10s %-15s %-15s %-10s %s%n","Reservation Id:","Room","Check in","Check out","Cost","Status");
         for(int i=0;i<reservations.size();i++)
         {
             Reservation res = reservations.get(i);
-            System.out.printf(res.getReservationId(), res.getRoomId(), res.CheckInDate(), res.CheckOutDate(), res.getTotalCost(),
+            System.out.printf("%-18s %-10s %-15s %-15s %-10.2f %s%n",res.getReservationId(), res.getRoomId(), res.CheckInDate(), res.CheckOutDate(), res.getTotalCost(),
                     res.getStatus());
         }
 
@@ -66,25 +65,28 @@ public class DisplayUtils
         {
             System.out.println("No guests found");
         }
-        System.out.printf("Guest Id:","Username","Gender","Balance");
+        System.out.printf("%-12s %-15s %-10s %s%n","Guest Id:","Username","Gender","Balance");
         for(int i=0;i<guests.size();i++)
         {
             Guest g = guests.get(i);
-            System.out.printf(g.getGuestId(), g.getUsename(), g.getGender(), g.getBalance());
+            System.out.printf("%-12s %-15s %-10s %.2f%n",g.getGuestId(), g.getUsename(), g.getGender(), g.getBalance());
         }
 
     }
     public static void printSuccess(String message)
     {
         System.out.println("\nDone successfully: "+message);
+        System.out.println("");
     }
     public static void printError(String message)
     {
         System.out.println("\nError: "+message);
+        System.out.println("");
     }
     public static void printInfo(String message)
     {
         System.out.println("Info: "+message);
+        System.out.println("");
     }
 
 
