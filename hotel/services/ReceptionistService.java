@@ -6,11 +6,11 @@ import hotel.models.Room;
 import java.util.List;
 
 public class ReceptionistService {
-    private final ReservationeService reservationService;
+    private final ReservationService reservationService;
     private final RoomService roomService;
     private final GuestService guestService;
 
-    public ReceptionistService(ReservationeService reservationService, RoomService roomService, GuestService guestService) {
+    public ReceptionistService(ReservationService reservationService, RoomService roomService, GuestService guestService) {
         this.reservationService = reservationService;
         this.roomService = roomService;
         this.guestService = guestService;
@@ -47,12 +47,12 @@ public class ReceptionistService {
     {
         return reservationService.getAllReservations();
     }
-    public Reservation finalReservationById(String id)
+    public Reservation findReservationById(String id)
     {
-        return reservationService.finalById(id);
+        return reservationService.findById(id);
     }
-    public Guest finalGuestById(String guestId)
+    public Guest findGuestById(String guestId)
     {
-        return guestService.finalGuestById(guestId);
+        return guestService.findGuestById(guestId);
     }
 }
