@@ -15,9 +15,10 @@ public class Guest implements Authenticatable {
     private String address;
     Gender gender;
     RoomPreference preference;
+    private static int idCounter;
 
-    public Guest(String guestId, String username, String password, String dob, double balance, String address, Gender gender, RoomPreference preference) {
-        this.guestId = guestId;
+    public Guest( String username, String password, String dob, double balance, String address, Gender gender, RoomPreference preference) {
+        this.guestId = "G" + String.format("%03d",idCounter++);
         this.username = username;
         this.password = password;
         this.dob = dob;
@@ -26,6 +27,17 @@ public class Guest implements Authenticatable {
         this.gender = gender;
         this.preference = preference;
     }
+    public Guest(String guestId, String username, String password, String dob, double balance, String address, Gender gender, RoomPreference preference) {
+        this.guestId =guestId ;
+        this.username = username;
+        this.password = password;
+        this.dob = dob;
+        this.balance = balance;
+        this.address = address;
+        this.gender = gender;
+        this.preference = preference;
+    }
+
 
     @Override
     public boolean authenticate(String username ,String password) {
