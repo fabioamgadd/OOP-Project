@@ -1,11 +1,11 @@
 package hotel.models;
-import java.util.Random;
+
 public class Amenity {
     private String amenityId;
     private String name;
     private String description;
     private double extraCostPerNight;
-    private static int counterId;
+    private static int counterId=8;
 
 
     public Amenity(){
