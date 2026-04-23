@@ -5,10 +5,10 @@ import hotel.interfaces.Payable;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.UUID;
-
 
 public class Invoice implements Payable {
+
+    private static int idCounter = 1;
 
     private String invoiceId;
     private String reservationId;
@@ -20,10 +20,9 @@ public class Invoice implements Payable {
     private LocalDate issuedDate;
     private LocalDate paidDate;
 
- 
 
     public Invoice(String reservationId, String guestId, double amountDue) {
-        this.invoiceId = UUID.randomUUID().toString();
+        this.invoiceId = "I" + String.format("%03d", idCounter++);
         this.reservationId = reservationId;
         this.guestId = guestId;
         this.amountDue = amountDue;
@@ -32,7 +31,6 @@ public class Invoice implements Payable {
         this.issuedDate = LocalDate.now();
     }
 
-    
     public Invoice(String invoiceId, String reservationId, String guestId,
                    double amountDue, double amountPaid, PaymentMethod paymentMethod,
                    boolean paid, LocalDate issuedDate, LocalDate paidDate) {
@@ -47,7 +45,7 @@ public class Invoice implements Payable {
         this.paidDate = paidDate;
     }
 
-   
+
     @Override
     public boolean pay(double amount, PaymentMethod paymentMethod) {
         if (paid) return false;
@@ -64,51 +62,30 @@ public class Invoice implements Payable {
     public double getAmountDue() {
         if (paid) {
             return 0.0;
-        }
-        else {
+        } else {
             return amountDue;
         }
     }
 
-  
 
-    public String getInvoiceId() { return invoiceId; }
-    public String getReservationId() { return reservationId; }
-    public String getGuestId() { return guestId; }
-    public double getTotalAmountDue() { return amountDue; }
-    public double getAmountPaid() { return amountPaid; }
-    public PaymentMethod getPaymentMethod() { return paymentMethod; }
-    public boolean isPaid() { return paid; }
-    public LocalDate getIssuedDate() { return issuedDate; }
-    public LocalDate getPaidDate() { return paidDate; }
+    public String getInvoiceId()          { return invoiceId; }
+    public String getReservationId()      { return reservationId; }
+    public String getGuestId()            { return guestId; }
+    public double getTotalAmountDue()     { return amountDue; }
+    public double getAmountPaid()         { return amountPaid; }
+    public PaymentMethod getPaymentMethod(){ return paymentMethod; }
+    public boolean isPaid()               { return paid; }
+    public LocalDate getIssuedDate()      { return issuedDate; }
+    public LocalDate getPaidDate()        { return paidDate; }
 
-  
+
     public String getFormattedInvoice() {
-      String statusStr;
-        if (paid) {
-            statusStr = "PAID";
-        }
-        else {
-            statusStr = "UNPAID";
-        }
+        String statusStr = paid ? "PAID" : "UNPAID";
+        String paidDateStr = (paidDate != null) ? paidDate.toString() : "N/A";
+        String paymentMethodStr = (paymentMethod != null) ? paymentMethod.toString() : "N/A";
 
-        String paidDateStr;
-        if (paidDate != null) {
-            paidDateStr = paidDate.toString();
-        }
-        else {
-            paidDateStr = "N/A";
-        }
-
-        String paymentMethodStr;
-        if (paymentMethod != null) {
-            paymentMethodStr = paymentMethod.toString();
-        }
-        else {
-            paymentMethodStr = "N/A";
-        }
         return String.format(
-                " *Invoice* \n" +
+                "⭐Invoice⭐\n" +
                 "Invoice ID    : %s\n" +
                 "Reservation ID: %s\n" +
                 "Guest ID      : %s\n" +
@@ -117,12 +94,10 @@ public class Invoice implements Payable {
                 "Status        : %s\n" +
                 "Issued Date   : %s\n" +
                 "Paid Date     : %s\n" +
-                "Payment Method: %s\n" +
+                "Payment Method: %s",
                 invoiceId, reservationId, guestId,
-                amountDue, amountPaid,statusStr,
-                issuedDate,
-                paidDateStr,
-                paymentMethodStr
+                amountDue, amountPaid, statusStr,
+                issuedDate, paidDateStr, paymentMethodStr
         );
     }
 
@@ -140,5 +115,8 @@ public class Invoice implements Payable {
         return Objects.equals(invoiceId, invoice.invoiceId);
     }
 
-  
+    @Override
+    public int hashCode() {
+        return Objects.hash(invoiceId);
+    }
 }
