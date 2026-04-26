@@ -74,7 +74,7 @@ public class RoomType {
     public boolean equals(Object obj) {
         if (obj instanceof RoomType) {
             RoomType roomType = (RoomType) obj;
-            if (this.typeId == roomType.typeId) {
+            if (this.typeId.equals(roomType.typeId)) {
                 return true;
             }
         }
