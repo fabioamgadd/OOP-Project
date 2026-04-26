@@ -2,87 +2,90 @@ package hotel.models;
 
 import hotel.enums.Gender;
 import hotel.enums.Role;
+import hotel.interfaces.Authenticatable;
 import hotel.utils.PasswordUtils;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
-abstract class Staff {
+public abstract class Staff implements Authenticatable {
+
+    private static int idCounter = 1;
+
     private String staffId;
     private String username;
     private String password;
-    private String dob;
+    private LocalDate dateOfBirth;
+    private Role role;
     private int workingHours;
-    Role role;
-    Gender gender;
-    private static int idCounter=0;
-     protected Staff( String staffId1, String username, String password,String dob, Role role, int workingHours , Gender gender){
-         this.staffId = staffId1;
-         this. username=username;
-         this. password=password;
-         this.role=role;
-         this.workingHours=workingHours;
-         this.gender=gender;
-         this.dob=dob;
-     }
-    protected Staff(  String username, String password,String dob, Role role, int workingHours , Gender gender){
-         this.staffId = "S"+ String.format("%03d",idCounter++);
-         this. username=username;
-         this. password=password;
-         this.role=role;
-         this.workingHours=workingHours;
-         this.gender=gender;
-        this.dob=dob;
-     }
+    private Gender gender;
 
 
-    public String getStaffId() {
-        return staffId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public int getWorkingHours() {
-
-         return workingHours;
-    }
-
-    public void setStaffId(String staffId) {
-        this.staffId = staffId;
-    }
-
-    public void setUsername(String username) {
+    protected Staff(String username, String plainPassword, LocalDate dateOfBirth,
+                    Role role, int workingHours, Gender gender) {
+        this.staffId = "S" + String.format("%03d", idCounter++);
         this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setWorkingHours(int workingHours) {
-       if(workingHours>=0&&workingHours<=168)
+        this.password = PasswordUtils.hash(plainPassword);
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
         this.workingHours = workingHours;
-       else
-           System.out.println("invalid number");
+        this.gender = gender;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    protected Staff(String staffId, String username, String storedPassword,
+                    LocalDate dateOfBirth, Role role, int workingHours, Gender gender) {
+        this.staffId = staffId;
+        this.username = username;
+        this.password = storedPassword;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+        this.workingHours = workingHours;
+        this.gender = gender;
     }
+
+
+    @Override
+    public boolean authenticate(String plainPassword) {
+        return PasswordUtils.matches(plainPassword, this.password);
+    }
+
+    @Override
+    public String getUsername() { return username; }
+
 
     public abstract String getRoleDescription();
+
+
+    public String getStaffId() { return staffId; }
+
+    public void setUsername(String username) { this.username = username; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String plainPassword) {
+        this.password = PasswordUtils.hash(plainPassword);
+    }
+
+    public LocalDate getDateOfBirth() { return dateOfBirth; }
+    public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+
+    public Role getRole() { return role; }
+
+    public int getWorkingHours() { return workingHours; }
+    public void setWorkingHours(int workingHours) {
+        if (workingHours < 0 || workingHours > 168) {
+            throw new IllegalArgumentException("Working hours must be between 0 and 168 per week.");
+        }
+        this.workingHours = workingHours;
+    }
+
+    public Gender getGender() { return gender; }
+    public void setGender(Gender gender) { this.gender = gender; }
+
+
     @Override
     public String toString() {
-        return ("Staffid = "+staffId+"Username= "+username+"role= "+role+"working hours = "+workingHours);
+        return String.format("Staff{id='%s', username='%s', role=%s, workingHours=%d}",
+                staffId, username, role, workingHours);
     }
 
     @Override
@@ -92,9 +95,9 @@ abstract class Staff {
         Staff staff = (Staff) o;
         return Objects.equals(staffId, staff.staffId);
     }
-    public boolean authenticate(String username, String password) {
-       if ( this.username.equals(username) && PasswordUtils.matches(password, this.password))
-           return true;
-    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(staffId);
+    }
 }
