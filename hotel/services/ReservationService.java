@@ -1,6 +1,7 @@
 package hotel.services;
 
 import hotel.database.HotelDatabase;
+import hotel.enums.ReservationStatus;
 import hotel.models.Reservation;
 import hotel.models.Room;
 
@@ -20,22 +21,33 @@ public class ReservationService {
 
     public Reservation makeReservation(String guestId, String roomId,
                                        LocalDate checkInDate, LocalDate checkOutDate) {
+
         Room room = roomService.findById(roomId);
+
         if (room == null) {
             throw new IllegalArgumentException("Room '" + roomId + "' does not exist.");
         }
+
         if (!room.isAvailable()) {
-            throw new IllegalStateException("Room '" + roomId + "' is currently not available.");
+            throw new IllegalStateException("Room '" + roomId + "' is unavailable by admin.");
         }
 
         for (Reservation existing : HotelDatabase.reservations) {
-            if (existing.getRoomId().equals(roomId) &&
-                existing.getStatus() != hotel.enums.ReservationStatus.CANCELLED &&
-                existing.getStatus() != hotel.enums.ReservationStatus.CHECKED_OUT) {
-                
-                if (checkInDate.isBefore(existing.getCheckOutDate()) && checkOutDate.isAfter(existing.getCheckInDate())) {
-                    throw new IllegalStateException("Room '" + roomId + "' is already booked for these dates.");
-                }
+            if (!existing.getRoomId().equals(roomId)) {
+                continue;
+            }
+
+            if (existing.getStatus() == ReservationStatus.CANCELLED
+                    || existing.getStatus() == ReservationStatus.CHECKED_OUT) {
+                continue;
+            }
+
+            boolean overlaps =
+                    checkInDate.isBefore(existing.getCheckOutDate())
+                            && checkOutDate.isAfter(existing.getCheckInDate());
+
+            if (overlaps) {
+                throw new IllegalStateException("Room '" + roomId + "' is already booked for these dates.");
             }
         }
 
