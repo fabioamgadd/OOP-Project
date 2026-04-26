@@ -1,20 +1,31 @@
 package hotel.models;
 
+import hotel.enums.Gender;
 import hotel.enums.Role;
 
-public class Receptionist extends Staff, Role.RECEPTIONIST {
-     public Receptionist(String staffId1, String username, String password,String dob , int workingHours , Gender gender){
-        super(staffId1,username,password,dob,Role.RECEPTIONIST,workingHours,gender);
+import java.time.LocalDate;
+
+public class Receptionist extends Staff {
+
+    public Receptionist(String username, String plainPassword, LocalDate dateOfBirth,
+                        int workingHours, Gender gender) {
+        super(username, plainPassword, dateOfBirth, Role.RECEPTIONIST, workingHours, gender);
     }
-ublic Receptionist(String username, String password,String dob , int workingHours , Gender gender){
-        super(username,password,dob,Role.RECEPTIONIST,workingHours,gender);
+
+    public Receptionist(String staffId, String username, String hashedPassword,
+                        LocalDate dateOfBirth, int workingHours, Gender gender) {
+        super(staffId, username, hashedPassword, dateOfBirth, Role.RECEPTIONIST, workingHours, gender);
     }
+
+
     @Override
     public String getRoleDescription() {
-        return "this is the Receptionist ";
+        return "Receptionist: Manages guest check-in and check-out operations.";
     }
-@Override
+
+
+    @Override
     public String toString() {
-        return ("Receptionist" + super.toString());
+        return String.format("Receptionist{%s}", super.toString());
     }
 }
