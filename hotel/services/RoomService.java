@@ -148,7 +148,7 @@ public class RoomService implements Manageable<Room> {
         for (int i=0;i<HotelDatabase.roomTypes.size();i++){
             RoomType r=HotelDatabase.roomTypes.get(i);
             if (r.getTypeId().equals(typeID)) {
-                HotelDatabase.roomTypes.remove(r);
+                HotelDatabase.roomTypes.remove(i);
                 return true;
             }
         }
