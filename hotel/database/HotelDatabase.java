@@ -151,7 +151,6 @@ public class HotelDatabase {
                 checkIn, checkOut,
                 ReservationStatus.CONFIRMED, cost, LocalDate.now());
         reservations.add(res);
-        room201.setAvailable(false);
 
         Invoice inv = new Invoice("inv-seed-001", "res-seed-001", "guest-001",
                 cost, 0.0, null, false, LocalDate.now(), null);
