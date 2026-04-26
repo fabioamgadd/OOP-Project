@@ -104,7 +104,7 @@ public class Room {
     public boolean equals(Object obj) {
         if (obj instanceof Room) {
             Room room = (Room) obj;
-            if (this.roomId == room.roomId) {
+            if (this.roomId.equals(room.roomId)) {
                 return true;
             }
         }
