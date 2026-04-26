@@ -66,7 +66,7 @@ public class RoomType {
 
     @Override
     public String toString() {
-        return "RoomType(id="+typeId+" name="+ typeName+" price="+basePricePerNight +" maxOccupancy="+ maxOccupancy+"]";
+        return "RoomType [id = "+typeId+", name = "+ typeName+", price = "+basePricePerNight +", maxOccupancy = "+ maxOccupancy+"]";
 
     }
 
