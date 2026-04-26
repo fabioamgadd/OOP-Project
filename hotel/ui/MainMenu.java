@@ -41,8 +41,25 @@ public class MainMenu {
             System.out.println("2. Register");
             System.out.println("3. Exit");
             System.out.print("\nEnter Choice: ");
-            int Choice = scanner.nextInt();
-            scanner.nextLine();
+            int Choice;
+
+            while (true) {
+                System.out.print("Enter your choice: ");
+                String input = scanner.nextLine().trim();
+
+                try {
+                    Choice = Integer.parseInt(input);
+
+                    if (Choice == 1 || Choice == 2) {
+                        break;
+                    }
+
+                    System.out.println("Invalid choice. Please enter 1 for Login or 2 for Register.");
+
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input. Please enter a number only.");
+                }
+            }
 
             if (Choice == 1) {
                 handleLogin();
