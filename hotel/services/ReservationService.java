@@ -115,12 +115,38 @@ public class ReservationService {
 
     public boolean checkIn(String reservationId) {
         Reservation res = findById(reservationId);
-        if (res == null) throw new IllegalArgumentException("Reservation not found.");
-        if (LocalDate.now().isBefore(res.getCheckInDate())) {
-            throw new IllegalStateException("Cannot check in before the reservation start date (" + res.getCheckInDate() + ").");
+
+        if (res == null) {
+            throw new IllegalArgumentException("Reservation not found.");
         }
+
+        Room room = roomService.findById(res.getRoomId());
+
+        if (room == null) {
+            throw new IllegalStateException("Room for this reservation no longer exists.");
+        }
+
+        if (!room.isAvailable()) {
+            throw new IllegalStateException("Cannot check in because room '" + room.getRoomId() + "' is unavailable by admin.");
+        }
+
+        LocalDate today = LocalDate.now();
+
+        if (today.isBefore(res.getCheckInDate())) {
+            throw new IllegalStateException("Cannot check in before the reservation start date.");
+        }
+
+        if (!today.isBefore(res.getCheckOutDate())) {
+            throw new IllegalStateException("Cannot check in after the reservation has ended.");
+        }
+
         boolean ok = res.checkIn();
-        return ok;
+
+        if (!ok) {
+            throw new IllegalStateException("Reservation cannot be checked in while status is " + res.getStatus() + ".");
+        }
+
+        return true;
     }
 
 
