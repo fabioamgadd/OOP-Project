@@ -1,6 +1,6 @@
 package hotel.interfaces;
 
 public interface Authenticatable {
-    public boolean authenticate(String plainPassword);
-    public  String getUsername();
+    boolean authenticate(String password);
+    String getUsername();
 }
