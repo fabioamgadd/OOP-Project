@@ -51,7 +51,7 @@ public class RoomPreference {
 
     @Override
     public String toString() {
-        return "RoomPreference[type="+ preferredRoomTypeName+ " floor="+preferredFloor+ " smoking=" +smokingRoom+" accessibility="+accessibilityRequired;
+        return "RoomPreference [type = "+ preferredRoomTypeName+ " floor = "+preferredFloor+ " smoking = " +smokingRoom+" accessibility = "+accessibilityRequired+"]";
 
     }
 }
