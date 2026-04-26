@@ -40,11 +40,10 @@ public class MainMenu {
             System.out.println("1. Login");
             System.out.println("2. Register");
             System.out.println("3. Exit");
-            System.out.print("\nEnter Choice: ");
             int Choice;
 
             while (true) {
-                System.out.print("Enter your choice: ");
+                System.out.print("\nEnter Choice: ");
                 String input = scanner.nextLine().trim();
 
                 try {
