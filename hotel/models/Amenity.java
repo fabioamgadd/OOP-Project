@@ -70,7 +70,7 @@ public class Amenity {
     public boolean equals(Object obj) {
         if (obj instanceof Amenity) {
             Amenity amenity = (Amenity) obj;
-            if (this.amenityId == amenity.amenityId) {
+            if (this.amenityId.equals(amenity.amenityId)) {
                 return true;
             }
         }
