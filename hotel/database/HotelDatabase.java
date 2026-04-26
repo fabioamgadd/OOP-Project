@@ -103,37 +103,37 @@ public class HotelDatabase {
 
         // Receptionist 1
         staffMembers.add(new Receptionist(
-                "staff-recep-001", "sara_r","Recep@123",
-                LocalDate.of(1995, 7, 22), 40, Gender.FEMALE));
+                "staff-recep-001", "pierre","Recep@123",
+                LocalDate.of(2007, 6, 15), 40, Gender.MALE));
 
         // Receptionist 2
         staffMembers.add(new Receptionist(
-                "staff-recep-002", "ahmed_r", "Recep@456",
-                LocalDate.of(1993, 11, 5), 40, Gender.MALE));
+                "staff-recep-002", "fabio", "Recep@456",
+                LocalDate.of(2006, 6, 11), 40, Gender.MALE));
     }
 
     private static void seedGuests() {
         // Guest 1
         Guest g1 = new Guest(
-                "guest-001", "john_doe","Guest@123",
-                LocalDate.of(1990, 4, 15), 3000.0,
-                "15 Nile St, Cairo", Gender.MALE,
+                "guest-001", "habiba","Guest@123",
+                LocalDate.of(2007, 2, 7), 3000.0,
+                "15 Nile St, Cairo", Gender.FEMALE,
                 new RoomPreference("Double", 2, false, false));
         guests.add(g1);
 
         // Guest 2
         Guest g2 = new Guest(
-                "guest-002", "layla_m", "Guest@456",
-                LocalDate.of(1997, 9, 30), 7500.0,
+                "guest-002", "mennat-allah", "Guest@456",
+                LocalDate.of(2006, 10, 28), 7500.0,
                 "88 Zamalek Ave, Cairo", Gender.FEMALE,
                 new RoomPreference("Suite", 5, false, false));
         guests.add(g2);
 
         // Guest 3
         Guest g3 = new Guest(
-                "guest-003", "omar_k","Guest@789",
-                LocalDate.of(1985, 1, 20), 1200.0,
-                "3 Maadi St, Cairo", Gender.MALE,
+                "guest-003", "selena","Guest@789",
+                LocalDate.of(2008, 4, 12), 1200.0,
+                "3 Maadi St, Cairo", Gender.FEMALE,
                 new RoomPreference("Single", 1, false, false));
         guests.add(g3);
     }
