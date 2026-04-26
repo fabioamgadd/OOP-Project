@@ -97,7 +97,7 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Room[id="+roomId+", floor="+floorNumber+", type="+roomType.getTypeName()+", available="+available+", price="+getTotalPricePerNight()+"/night]";
+        return "Room [id = "+roomId+", floor = "+floorNumber+", type = "+roomType.getTypeName()+", available = "+available+", price = "+getTotalPricePerNight()+"/night]";
     }
 
     @Override
