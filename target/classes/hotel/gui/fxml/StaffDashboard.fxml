@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hotel.gui.controllers.StaffDashboardController"
+            prefWidth="1100" prefHeight="680">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox styleClass="top-bar" alignment="CENTER_LEFT" spacing="20">
+            <Label text="HOTEL" style="-fx-text-fill:white; -fx-font-size:15px; -fx-font-weight:bold;"/>
+            <Label fx:id="roleLabel" text="" style="-fx-text-fill:#93C5FD; -fx-font-size:12px; -fx-padding:0 0 0 6;"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="staffNameLabel" text="" style="-fx-text-fill:#94A3B8; -fx-font-size:12px;"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="btn-secondary"
+                    style="-fx-font-size:12px; -fx-padding:5 14 5 14;"/>
+        </HBox>
+    </top>
+
+    <!-- SIDEBAR — buttons shown/hidden depending on role -->
+    <left>
+        <VBox styleClass="sidebar" spacing="2">
+            <Button fx:id="btnChat" text="💬 Guest Chat" onAction="#showChat"
+                    styleClass="sidebar-btn sidebar-chat-btn" maxWidth="Infinity"/>
+            <!-- Receptionist + Admin -->
+            <Button fx:id="btnGuests"       text="👥  All Guests"        onAction="#showGuests"       styleClass="sidebar-btn"/>
+            <Button fx:id="btnRooms"        text="🏨  All Rooms"         onAction="#showRooms"        styleClass="sidebar-btn"/>
+            <Button fx:id="btnAllRes"       text="📋  All Reservations"  onAction="#showAllReservations" styleClass="sidebar-btn"/>
+            <Button fx:id="btnCheckIn"      text="✅  Check In"          onAction="#showCheckIn"      styleClass="sidebar-btn"/>
+            <Button fx:id="btnCheckOut"     text="🚪  Check Out"         onAction="#showCheckOut"     styleClass="sidebar-btn"/>
+            <!-- Admin only -->
+            <Button fx:id="btnRoomTypes"    text="🗂  Room Types"        onAction="#showRoomTypes"    styleClass="sidebar-btn"/>
+            <Button fx:id="btnAmenities"    text="✨  Amenities"         onAction="#showAmenities"    styleClass="sidebar-btn"/>
+            <Button fx:id="btnInvoices"     text="🧾  All Invoices"      onAction="#showInvoices"     styleClass="sidebar-btn"/>
+            <Button fx:id="btnRevenue"      text="📊  Revenue"           onAction="#showRevenue"      styleClass="sidebar-btn"/>
+        </VBox>
+    </left>
+
+    <!-- MAIN CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <StackPane fx:id="contentArea" style="-fx-padding:24;">
+            </StackPane>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

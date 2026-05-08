@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="hotel.gui.controllers.LoginController"
+           styleClass="login-root"
+           prefWidth="900" prefHeight="600">
+
+    <VBox alignment="CENTER" spacing="0">
+
+        <!-- Hotel name above card -->
+        <Label text="HOTEL" style="-fx-font-size:14px; -fx-font-weight:bold; -fx-text-fill:rgba(255,255,255,0.7); -fx-letter-spacing:3px;"/>
+        <Label text="Reservation System" style="-fx-font-size:11px; -fx-text-fill:rgba(255,255,255,0.45); -fx-padding:0 0 20 0;"/>
+
+        <!-- Main card -->
+        <VBox styleClass="login-card" spacing="0">
+
+            <!-- Toggle tabs -->
+            <HBox spacing="0" style="-fx-background-color:#F1F5F9; -fx-background-radius:8; -fx-padding:4;" alignment="CENTER">
+                <Button fx:id="loginTabBtn"  text="Login"    onAction="#showLogin"
+                        prefWidth="150" styleClass="btn-primary" style="-fx-background-radius:6;"/>
+                <Button fx:id="registerTabBtn" text="Register" onAction="#showRegister"
+                        prefWidth="150" styleClass="btn-secondary" style="-fx-background-radius:6;"/>
+            </HBox>
+
+            <VBox fx:id="loginPane" spacing="14" style="-fx-padding:28 0 0 0;">
+                <Label text="Welcome Back" styleClass="login-title"/>
+                <Label text="Sign in to your account" styleClass="login-subtitle" style="-fx-padding:0 0 6 0;"/>
+
+                <Label text="Username" styleClass="login-field-label"/>
+                <TextField fx:id="loginUsername" promptText="Enter your username"/>
+
+                <Label text="Password" styleClass="login-field-label"/>
+                <PasswordField fx:id="loginPassword" promptText="Enter your password"/>
+
+                <Label fx:id="loginError" styleClass="error-label" text="" wrapText="true"/>
+
+                <Button text="Sign In" onAction="#handleLogin" styleClass="btn-primary"
+                        maxWidth="Infinity" style="-fx-padding:11 0 11 0; -fx-font-size:14px;"/>
+            </VBox>
+
+            <VBox fx:id="registerPane" spacing="10" style="-fx-padding:28 0 0 0;" visible="false" managed="false">
+                <Label text="Create Account" styleClass="login-title"/>
+                <Label text="Register as a new guest" styleClass="login-subtitle" style="-fx-padding:0 0 4 0;"/>
+
+                <HBox spacing="12">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Username" styleClass="login-field-label"/>
+                        <TextField fx:id="regUsername" promptText="Username"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Password" styleClass="login-field-label"/>
+                        <PasswordField fx:id="regPassword" promptText="Password"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="12">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Date of Birth" styleClass="login-field-label"/>
+                        <DatePicker fx:id="regDOB" promptText="yyyy-MM-dd" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                        <Label text="Gender" styleClass="login-field-label"/>
+                        <ComboBox fx:id="regGender" promptText="Select Gender" maxWidth="Infinity"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="4">
+                    <Label text="Address" styleClass="login-field-label"/>
+                    <TextField fx:id="regAddress" promptText="Your address"/>
+                </VBox>
+
+                <Label fx:id="registerError" styleClass="error-label" text="" wrapText="true"/>
+                <Label fx:id="registerSuccess" styleClass="success-label" text="" wrapText="true"/>
+
+                <Button text="Create Account" onAction="#handleRegister" styleClass="btn-success"
+                        maxWidth="Infinity" style="-fx-padding:10 0 10 0; -fx-font-size:13px;"/>
+            </VBox>
+
+        </VBox>
+
+    </VBox>
+</StackPane>
