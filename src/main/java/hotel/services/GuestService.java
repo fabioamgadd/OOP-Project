@@ -73,6 +73,10 @@ public class GuestService {
     {
         guest.deposit(amount);
     }
+
+    public void addExtraAmenityToReservation(Guest guest, String reservationId, String amenityId) {
+        reservationService.addExtraAmenityToReservation(reservationId, guest.getGuestId(), amenityId);
+    }
     public Guest findGuestById(String guestId)
     {
 
