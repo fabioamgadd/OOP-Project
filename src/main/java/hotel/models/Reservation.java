@@ -4,11 +4,24 @@ import hotel.enums.ReservationStatus;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Reservation {
 
     private static int idCounter = 1;
+
+    public static void updateIdCounter(String existingId) {
+        if (existingId != null && existingId.startsWith("R")) {
+            try {
+                int num = Integer.parseInt(existingId.substring(1));
+                if (num >= idCounter) {
+                    idCounter = num + 1;
+                }
+            } catch (NumberFormatException ignored) {}
+        }
+    }
 
     private String reservationId;
     private String guestId;
@@ -18,6 +31,7 @@ public class Reservation {
     private ReservationStatus status;
     private double totalCost;
     private LocalDate createdAt;
+    private List<Amenity> extraAmenities = new ArrayList<>();
 
     public Reservation(String guestId, Room room, LocalDate checkInDate, LocalDate checkOutDate) {
         validateDates(checkInDate, checkOutDate);
@@ -120,6 +134,33 @@ public class Reservation {
 
     public double getTotalCost() {
         return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
+    }
+
+    public List<Amenity> getExtraAmenities() {
+        return extraAmenities;
+    }
+    
+    public void addExtraAmenity(Amenity amenity, List<Amenity> roomAmenities, long nights) {
+        if (amenity == null) throw new IllegalArgumentException("Amenity cannot be null.");
+
+        for (Amenity a : roomAmenities) {
+            if (a.getAmenityId().equals(amenity.getAmenityId())) {
+                throw new IllegalArgumentException(
+                        "\"" + amenity.getName() + "\" is already included in the room's fixed amenities.");
+            }
+        }
+        for (Amenity a : extraAmenities) {
+            if (a.getAmenityId().equals(amenity.getAmenityId())) {
+                throw new IllegalArgumentException(
+                        "\"" + amenity.getName() + "\" has already been added as an extra amenity.");
+            }
+        }
+        extraAmenities.add(amenity);
+        totalCost += amenity.getExtraCostPerNight() * nights;
     }
 
 
