@@ -28,7 +28,6 @@ public class HotelDatabase {
     }
 
     private HotelDatabase(){
-        //private to prevent making object from it
     }
 
     private static void seedAmenities() {
@@ -106,14 +105,12 @@ public class HotelDatabase {
                 "staff-recep-001", "pierre","Recep@123",
                 LocalDate.of(2007, 6, 15), 40, Gender.MALE));
 
-        // Receptionist 2
         staffMembers.add(new Receptionist(
                 "staff-recep-002", "fabio", "Recep@456",
                 LocalDate.of(2006, 6, 11), 40, Gender.MALE));
     }
 
     private static void seedGuests() {
-        // Guest 1
         Guest g1 = new Guest(
                 "guest-001", "habiba","Guest@123",
                 LocalDate.of(2007, 2, 7), 3000.0,
@@ -121,7 +118,6 @@ public class HotelDatabase {
                 new RoomPreference("Double", 2, false, false));
         guests.add(g1);
 
-        // Guest 2
         Guest g2 = new Guest(
                 "guest-002", "mennat-allah", "Guest@456",
                 LocalDate.of(2006, 10, 28), 7500.0,
@@ -129,7 +125,6 @@ public class HotelDatabase {
                 new RoomPreference("Suite", 5, false, false));
         guests.add(g2);
 
-        // Guest 3
         Guest g3 = new Guest(
                 "guest-003", "selena","Guest@789",
                 LocalDate.of(2008, 4, 12), 1200.0,
@@ -156,7 +151,6 @@ public class HotelDatabase {
                 cost, 0.0, null, false, LocalDate.now(), null);
         invoices.add(inv);
 
-        // One already paid invoice for guest-002
         Reservation res2 = new Reservation(
                 "res-seed-002", "guest-002", "501",
                 LocalDate.now().minusDays(10), LocalDate.now().minusDays(7),
