@@ -59,6 +59,13 @@ public class InvoiceService {
 
   
 
+    public void updateInvoiceAmount(String reservationId, double newAmount) {
+        Invoice invoice = findByReservationId(reservationId);
+        if (invoice != null && !invoice.isPaid()) {
+            invoice.setAmountDue(newAmount);
+        }
+    }
+
     public Invoice findById(String invoiceId) {
         for (Invoice invoice : HotelDatabase.invoices) {
             if (invoice.getInvoiceId().equals(invoiceId)) {
