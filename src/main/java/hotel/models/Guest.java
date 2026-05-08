@@ -11,6 +11,17 @@ public class Guest implements Authenticatable {
 
     private static int idCounter = 1;
 
+    public static void updateIdCounter(String existingId) {
+        if (existingId != null && existingId.startsWith("G")) {
+            try {
+                int num = Integer.parseInt(existingId.substring(1));
+                if (num >= idCounter) {
+                    idCounter = num + 1;
+                }
+            } catch (NumberFormatException ignored) {}
+        }
+    }
+
     private String guestId;
     private String username;
     private String password;
