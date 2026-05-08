@@ -2,6 +2,7 @@ package hotel.services;
 
 import hotel.database.HotelDatabase;
 import hotel.enums.ReservationStatus;
+import hotel.models.Amenity;
 import hotel.models.Reservation;
 import hotel.models.Room;
 
@@ -149,6 +150,27 @@ public class ReservationService {
         return true;
     }
 
+
+    public void addExtraAmenityToReservation(String reservationId, String guestId, String amenityId) {
+        Reservation res = findById(reservationId);
+        if (res == null) throw new IllegalArgumentException("Reservation '" + reservationId + "' not found.");
+
+        if (!res.getGuestId().equals(guestId))
+            throw new SecurityException("You can only modify your own reservations.");
+
+        if (res.getStatus() != ReservationStatus.CONFIRMED && res.getStatus() != ReservationStatus.CHECKED_IN)
+            throw new IllegalStateException("Cannot add amenities to a reservation with status: " + res.getStatus() + ".");
+
+        Amenity amenity = HotelDatabase.findAmenityById(amenityId);
+        if (amenity == null) throw new IllegalArgumentException("Amenity '" + amenityId + "' not found.");
+
+        Room room = roomService.findById(res.getRoomId());
+        if (room == null) throw new IllegalStateException("Room for this reservation no longer exists.");
+
+        res.addExtraAmenity(amenity, room.getAmenities(), res.getNumberOfNights());
+
+        invoiceService.updateInvoiceAmount(res.getReservationId(), res.getTotalCost());
+    }
 
     public boolean checkOut(String reservationId) {
         Reservation res = findById(reservationId);
