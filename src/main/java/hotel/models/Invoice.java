@@ -78,6 +78,12 @@ public class Invoice implements Payable {
     public LocalDate getIssuedDate()      { return issuedDate; }
     public LocalDate getPaidDate()        { return paidDate; }
 
+    public void setAmountDue(double newAmount) {
+        if (paid) throw new IllegalStateException("Cannot modify a paid invoice.");
+        if (newAmount < 0) throw new IllegalArgumentException("Amount due cannot be negative.");
+        this.amountDue = newAmount;
+    }
+
 
     public String getFormattedInvoice() {
         String statusStr = paid ? "PAID" : "UNPAID";
